@@ -1,0 +1,163 @@
+services:
+
+  nginx:
+    container_name: nginx
+    # restart: always
+    build: ../infra-nginx-dockerized
+    ports:
+      - "80:80"
+    networks:
+      - spring_net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  vault:
+    image: hashicorp/vault:1.15.2
+    container_name: vault
+    # restart: always
+    ports:
+      - "8200:8200"
+    env_file:
+      - .env
+    environment:
+      VAULT_ADDR: "http://${PRIVATE_DOMAIN}:8200"
+      VAULT_API_ADDR: "http://${PRIVATE_DOMAIN}:8200"
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - spring_net
+    volumes:
+      - vault_data:/vault/data
+    command: >
+      sh -c '
+      echo "storage \"file\" { path = \"/vault/data\" } listener \"tcp\" { address = \"0.0.0.0:8200\" tls_disable = 1 } disable_mlock = true ui = true" > /vault/config/vault.hcl
+      && vault server -config=/vault/config/vault.hcl
+      '
+
+  accounts_database:
+    container_name: accounts_database
+    # restart: always
+    image: postgres:latest
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${ACCOUNTS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${ACCOUNTS_DATABASE_PASSWORD}
+      POSTGRES_DB: ${ACCOUNTS_DATABASE_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - spring_net
+
+  accounts_redis:
+    container_name: accounts_redis
+    # restart: always
+    env_file:
+      - .env
+    image: redis:latest
+    command: [
+      "redis-server",
+      "--port", "6379",
+      "--requirepass",
+      "${ACCOUNTS_REDIS_PASSWORD}",
+      "--notify-keyspace-events", "Ex"
+    ]
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - spring_net
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    # restart: always
+    ports:
+      - "6001:6001"  # Expose Kafka port
+    environment:
+      # KRaft mode configuration (without ZooKeeper)
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+
+      # Listener configuration with SASL
+      - KAFKA_CFG_LISTENERS=SASL_PLAINTEXT://:6001,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_PLAINTEXT://${PRIVATE_DOMAIN}:6001
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=SASL_PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+
+      # Authentication configuration
+      - KAFKA_CLIENT_USERS=${KAFKA_USER}
+      - KAFKA_CLIENT_PASSWORDS=${KAFKA_PASSWORD}
+      - KAFKA_CFG_SASL_ENABLED_MECHANISMS=PLAIN
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+
+      # Other configurations
+      - KAFKA_KRAFT_CLUSTER_ID=${KAFKA_KRAFT_CLUSTER_ID}
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    volumes:
+      - kafka_data:/bitnami/kafka
+
+  helloworld:
+    container_name: helloworld
+    # restart: always
+    build: ../helloworld
+    env_file:
+      - .env
+    ports:
+      - "${HELLOWORLD_PORT}:${HELLOWORLD_PORT}"
+    networks:
+      - spring_net
+    depends_on:
+      - vault
+
+  documentation:
+    container_name: documentation
+    # restart: always
+    build: ../documentation
+    env_file:
+      - .env
+    ports:
+      - "${DOCUMENTATION_PORT}:${DOCUMENTATION_PORT}"
+    networks:
+      - spring_net
+    depends_on:
+      - vault
+
+  email_management_service:
+    container_name: email_management_service
+    # restart: always
+    build: ../email_management_service
+    env_file:
+      - .env
+    ports:
+      - "${EMAIL_SERVICE_PORT}:${EMAIL_SERVICE_PORT}"
+    networks:
+      - spring_net
+    depends_on:
+      - vault
+
+  accounts:
+    container_name: accounts
+    # restart: always
+    build: ../accounts
+    env_file:
+      - .env
+    ports:
+      - "${ACCOUNTS_PORT}:${ACCOUNTS_PORT}"
+    networks:
+      - spring_net
+
+volumes:
+  vault_data:
+  postgres_data:
+  redis_data:
+  kafka_data:
+
+networks:
+  spring_net:
+    driver: bridge
