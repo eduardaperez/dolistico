@@ -46,7 +46,7 @@ services:
       - spring_net
 
   kafka:
-    image: confluentinc/confluent-local:latest
+    image: bitnami/kafka:latest
     container_name: kafka
     ports:
       - "6001:6001"  # Expose Kafka port
