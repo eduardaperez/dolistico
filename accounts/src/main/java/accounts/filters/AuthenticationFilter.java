@@ -35,6 +35,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 // ========================================================== (Constructor init)
 
+    private final MessageSource messageSource;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private SecretKey aesKey;
+    private List<String> publicPaths;
+
     // Keys
     // -------------------------------------------------------------------------
     @Value("${SECRET_KEY}")
@@ -42,29 +47,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${PUBLIC_KEY}")
     private String publicKey;
-    // -------------------------------------------------------------------------
 
-    // Public Endpoints
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
     // -------------------------------------------------------------------------
-    private final List<String> publicPaths = Arrays.asList(
-        "/api/v1/accounts/signup",
-        "/api/v1/accounts/activate-account",
-        "/api/v1/accounts/update-password-link",
-        "/api/v1/accounts/update-password",
-        "/api/v1/accounts/login",
-        "/api/v1/accounts/static/public/**",
-        // "/api/v1/accounts/static/uploads/avatar/**", Remove in production
-        "/api/v1/accounts/refresh-login"
-    );
-
-    public List<String> getPublicPaths() {
-        return new ArrayList<>(publicPaths);
-    }
-    // -------------------------------------------------------------------------
-
-    private final MessageSource messageSource;
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    private SecretKey aesKey;
 
     public AuthenticationFilter(
 
@@ -81,6 +67,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @PostConstruct
     private void init() {
 
+        publicPaths = Arrays.asList(
+            "/" + accountsBaseURL + "/static/public/**",
+            "/" + accountsBaseURL + "/signup",
+            "/" + accountsBaseURL + "/activate-account",
+            "/" + accountsBaseURL + "/update-password-link",
+            "/" + accountsBaseURL + "/update-password",
+            "/" + accountsBaseURL + "/login",
+            "/" + accountsBaseURL + "/refresh-login"
+        );
+
         try {
 
             MessageDigest sha = MessageDigest.getInstance("SHA-256");
@@ -94,6 +90,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         }
 
+    }
+
+    // Return public paths for spring security
+    public List<String> getPublicPaths() {
+        return new ArrayList<>(publicPaths);
     }
     // ==================================================== (Post construct end)
 

@@ -4,12 +4,15 @@
   {
     "APPLICATION_TITLE": "",
     "PUBLIC_DOMAIN": "",
-    "PRIVATE_DOMAIN": ""
+    "PRIVATE_DOMAIN": "",
+
+    // server
+    "DOCUMENTATION_PORT": "",
+    "DOCUMENTATION_BASE_URL": ""
   },
 
   // documentation-service
   {
-    "DOCUMENTATION_BASE_URL": ""
   }
 
 ]

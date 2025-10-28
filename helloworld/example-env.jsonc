@@ -4,12 +4,15 @@
   {
     "APPLICATION_TITLE": "",
     "PUBLIC_DOMAIN": "",
-    "PRIVATE_DOMAIN": ""
+    "PRIVATE_DOMAIN": "",
+
+    // server
+    "HELLOWORLD_PORT": "",
+    "HELLOWORLD_BASE_URL": ""
   },
 
   // helloworld-service
   {
-    "HELLOWORLD_BASE_URL": ""
   }
 
 ]

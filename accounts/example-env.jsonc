@@ -4,13 +4,15 @@
   {
     "APPLICATION_TITLE": "",
     "PUBLIC_DOMAIN": "",
-    "PRIVATE_DOMAIN": ""
+    "PRIVATE_DOMAIN": "",
+
+    // server
+    "ACCOUNTS_PORT": "",
+    "ACCOUNTS_BASE_URL": ""
   },
 
   // accounts-service
   {
-    "ACCOUNTS_PORT": "",
-    "ACCOUNTS_BASE_URL": "",
     "PUBLIC_KEY": ""
   },
 

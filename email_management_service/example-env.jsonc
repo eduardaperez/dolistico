@@ -4,13 +4,15 @@
   {
     "APPLICATION_TITLE": "",
     "PUBLIC_DOMAIN": "",
-    "PRIVATE_DOMAIN": ""
+    "PRIVATE_DOMAIN": "",
+
+    // server
+    "EMAIL_SERVICE_PORT": "",
+    "EMAIL_SERVICE_BASE_URL": ""
   },
 
   // email-management-service
   {
-    "EMAIL_SERVICE_PORT": "",
-    "EMAIL_SERVICE_BASE_URL": "",
     "EMAIL_HOST": "",
     "EMAIL_PORT": "",
     "EMAIL_ADDRESS_USER": "",

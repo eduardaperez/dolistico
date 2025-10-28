@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/")
 @Validated
 class AccountsUpdateEmailController {
 
