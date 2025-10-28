@@ -23,8 +23,16 @@ import java.util.Optional;
 @Service
 public class AccountsLinkDeleteService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+    // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
@@ -32,7 +40,6 @@ public class AccountsLinkDeleteService {
     private final AccountsManagementService accountsManagementService;
     private final EncryptionService encryptionService;
 
-    // constructor
     public AccountsLinkDeleteService(
 
         MessageSource messageSource,
@@ -50,6 +57,7 @@ public class AccountsLinkDeleteService {
         this.encryptionService  = encryptionService;
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -176,8 +184,8 @@ public class AccountsLinkDeleteService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/delete-account-link");
-        customLinks.put("next", "/accounts/delete-account");
+        customLinks.put("self", "/" + accountsBaseURL + "/delete-account-link");
+        customLinks.put("next", "/" + accountsBaseURL + "/delete-account");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

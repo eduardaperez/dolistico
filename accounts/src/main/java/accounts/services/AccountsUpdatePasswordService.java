@@ -8,6 +8,7 @@ import accounts.persistence.entities.AccountsEntity;
 import accounts.persistence.repositories.AccountsLogRepository;
 import accounts.persistence.repositories.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -26,7 +27,14 @@ import java.util.Optional;
 @Service
 public class AccountsUpdatePasswordService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsRepository accountsRepository;
@@ -38,7 +46,6 @@ public class AccountsUpdatePasswordService {
     private final Cache notActivatedAccountCache;
     private final Cache deletedAccountByUserCache;
 
-    // constructor
     public AccountsUpdatePasswordService(
 
         MessageSource messageSource,
@@ -63,6 +70,7 @@ public class AccountsUpdatePasswordService {
         this.deletedAccountByUserCache = cacheManager.getCache("deletedAccountByUserCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -177,8 +185,8 @@ public class AccountsUpdatePasswordService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/update-password");
-        customLinks.put("next", "/accounts/login");
+        customLinks.put("self", "/" + accountsBaseURL + "/update-password");
+        customLinks.put("next", "/" + accountsBaseURL + "/login");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

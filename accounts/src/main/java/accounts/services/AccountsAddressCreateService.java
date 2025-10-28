@@ -4,6 +4,7 @@ import accounts.dtos.AccountsAddressCreateDTO;
 import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsAddressEntity;
 import accounts.persistence.repositories.AccountsAddressRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,7 +19,14 @@ import java.util.*;
 @Service
 public class AccountsAddressCreateService {
 
-    // constructor
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final AccountsAddressRepository accountsAddressRepository;
     private final ErrorHandler errorHandler;
@@ -39,6 +47,7 @@ public class AccountsAddressCreateService {
         this.accountsManagementService = accountsManagementService;
 
     }
+    // ===================================================== ( constructor end )
 
     @CacheEvict(value = "addressCache", key = "#credentialsData['id']")
     public ResponseEntity execute (
@@ -128,8 +137,8 @@ public class AccountsAddressCreateService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/address-create");
-        customLinks.put("next", "/accounts/address-get");
+        customLinks.put("self", "/" + accountsBaseURL + "/address-create");
+        customLinks.put("next", "/" + accountsBaseURL + "/address-get");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(201)

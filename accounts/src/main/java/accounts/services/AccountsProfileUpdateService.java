@@ -4,6 +4,7 @@ import accounts.dtos.AccountsProfileUpdateDTO;
 import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsProfileEntity;
 import accounts.persistence.repositories.AccountsProfileRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,12 +16,18 @@ import java.util.*;
 @Service
 public class AccountsProfileUpdateService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsProfileRepository accountsProfileRepository;
 
-    // constructor
     public AccountsProfileUpdateService(
 
         MessageSource messageSource,
@@ -34,6 +41,7 @@ public class AccountsProfileUpdateService {
         this.accountsProfileRepository = accountsProfileRepository;
 
     }
+    // ===================================================== ( constructor end )
 
     @CacheEvict(value = "profileCache", key = "#credentialsData['id']")
     public ResponseEntity execute(
@@ -121,8 +129,8 @@ public class AccountsProfileUpdateService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/profile-update");
-        customLinks.put("next", "/accounts/profile-get");
+        customLinks.put("self", "/" + accountsBaseURL + "/profile-update");
+        customLinks.put("next", "/" + accountsBaseURL + "/profile-get");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

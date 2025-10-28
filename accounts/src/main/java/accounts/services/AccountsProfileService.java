@@ -4,6 +4,7 @@ import accounts.dtos.AccountsProfileDTO;
 import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsProfileEntity;
 import accounts.persistence.repositories.AccountsProfileRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -16,14 +17,20 @@ import java.util.*;
 @Service
 public class AccountsProfileService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsProfileRepository accountsProfileRepository;
     private final CacheManager cacheManager;
     private final Cache profileCache;
 
-    // constructor
     public AccountsProfileService(
 
         MessageSource messageSource,
@@ -40,8 +47,8 @@ public class AccountsProfileService {
         this.profileCache = cacheManager.getCache("profileCache");
 
     }
+    // ===================================================== ( constructor end )
 
-    // execute
     public ResponseEntity execute(
 
         Map<String, Object> credentialsData
@@ -101,8 +108,8 @@ public class AccountsProfileService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/profile-get");
-        customLinks.put("next", "/accounts/profile-update");
+        customLinks.put("self", "/" + accountsBaseURL + "/profile-get");
+        customLinks.put("next", "/" + accountsBaseURL + "/profile-update");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

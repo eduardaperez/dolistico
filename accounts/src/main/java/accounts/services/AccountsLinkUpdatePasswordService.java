@@ -23,8 +23,16 @@ import java.util.Optional;
 @Service
 public class AccountsLinkUpdatePasswordService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+    // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
@@ -32,7 +40,6 @@ public class AccountsLinkUpdatePasswordService {
     private final AccountsManagementService accountsManagementService;
     private final EncryptionService encryptionService;
 
-    // constructor
     public AccountsLinkUpdatePasswordService(
 
         MessageSource messageSource,
@@ -50,6 +57,7 @@ public class AccountsLinkUpdatePasswordService {
         this.encryptionService  = encryptionService;
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -173,8 +181,8 @@ public class AccountsLinkUpdatePasswordService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/update-password-link");
-        customLinks.put("next", "/accounts/update-password");
+        customLinks.put("self", "/" + accountsBaseURL + "/update-password-link");
+        customLinks.put("next", "/" + accountsBaseURL + "/update-password");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

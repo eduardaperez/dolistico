@@ -4,6 +4,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsProfileEntity;
 import accounts.persistence.repositories.AccountsProfileRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,8 +24,12 @@ import java.util.*;
 @Service
 public class AccountsAvatarCreateService {
 
-    // constructor
-    // ---------------------------------------------------------------------
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsProfileRepository accountsProfileRepository;
@@ -50,9 +55,8 @@ public class AccountsAvatarCreateService {
         Files.createDirectories(this.uploadDir);
 
     }
-    // ---------------------------------------------------------------------
+    // ===================================================== ( constructor end )
 
-    // Main method
     @CacheEvict(value = "profileCache", key = "#credentialsData['id']")
     @Transactional
     public ResponseEntity execute(
@@ -234,7 +238,7 @@ public class AccountsAvatarCreateService {
             // ---------------------------------------------------------------------
             AccountsProfileEntity profileUpdated = findProfileUser.get();
             profileUpdated.setProfileImage(
-                "/accounts/static/uploads/avatar/" + generatedName
+                "/" + accountsBaseURL + "/static/uploads/avatar/" + generatedName
             );
 
             accountsProfileRepository.save(profileUpdated);
@@ -257,8 +261,8 @@ public class AccountsAvatarCreateService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/upload-avatar");
-        customLinks.put("next", "/accounts/get-avatar");
+        customLinks.put("self", "/" + accountsBaseURL + "/upload-avatar");
+        customLinks.put("next", "/" + accountsBaseURL + "/get-avatar");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

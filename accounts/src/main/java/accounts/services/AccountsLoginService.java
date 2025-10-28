@@ -6,6 +6,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsEntity;
 import accounts.persistence.repositories.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,14 @@ import java.util.Optional;
 @Service
 public class AccountsLoginService {
 
-    // constructor
+    // ==================================================== ( constructor init )
+
+    // Env
     // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final EncryptionService encryptionService;
@@ -44,9 +51,8 @@ public class AccountsLoginService {
         this.accountsManagementService = accountsManagementService;
 
     }
-    // -------------------------------------------------------------------------
+    // ===================================================== ( constructor end )
 
-    // main method
     @Transactional
     public ResponseEntity execute(
 
@@ -186,8 +192,8 @@ public class AccountsLoginService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/login");
-        customLinks.put("next", "/accounts/profile-get");
+        customLinks.put("self", "/" + accountsBaseURL + "/login");
+        customLinks.put("next", "/" + accountsBaseURL + "/profile-get");
 
         // Tokens data
         Map<String, String> tokensData = new LinkedHashMap<>();

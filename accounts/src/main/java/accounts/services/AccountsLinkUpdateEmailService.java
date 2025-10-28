@@ -20,8 +20,16 @@ import java.util.*;
 @Service
 public class AccountsLinkUpdateEmailService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+    // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
@@ -29,7 +37,6 @@ public class AccountsLinkUpdateEmailService {
     private final EncryptionService encryptionService;
     private final AccountsRepository accountsRepository;
 
-    // constructor
     public AccountsLinkUpdateEmailService(
 
         MessageSource messageSource,
@@ -47,6 +54,7 @@ public class AccountsLinkUpdateEmailService {
         this.accountsRepository = accountsRepository;
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -188,8 +196,8 @@ public class AccountsLinkUpdateEmailService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/update-email-link");
-        customLinks.put("next", "/accounts/update-email");
+        customLinks.put("self", "/" + accountsBaseURL + "/update-email-link");
+        customLinks.put("next", "/" + accountsBaseURL + "/update-email");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

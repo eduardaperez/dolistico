@@ -5,6 +5,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsAddressEntity;
 import accounts.persistence.repositories.AccountsAddressRepository;
 import accounts.persistence.repositories.AccountsProfileRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -17,14 +18,20 @@ import java.util.*;
 @Service
 public class AccountsAddressGetService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsAddressRepository accountsAddressRepository;
     private final CacheManager cacheManager;
     private final Cache jwtCache;
 
-    // constructor
     public AccountsAddressGetService(
 
         MessageSource messageSource,
@@ -42,8 +49,8 @@ public class AccountsAddressGetService {
         this.jwtCache = cacheManager.getCache("addressCache");
 
     }
+    // ===================================================== ( constructor end )
 
-    // execute
     @SuppressWarnings("unchecked")
     public ResponseEntity execute(
 
@@ -106,8 +113,8 @@ public class AccountsAddressGetService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/address-get");
-        customLinks.put("next", "/accounts/address-create");
+        customLinks.put("self", "/" + accountsBaseURL + "/address-get");
+        customLinks.put("next", "/" + accountsBaseURL + "/address-create");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

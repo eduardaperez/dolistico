@@ -25,9 +25,17 @@ import java.util.*;
 @Service
 public class AccountsManagementService implements AccountsManagementInterface {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+
     // Attributes
     @Value("${APPLICATION_TITLE}")
     private String applicationTitle;
+    // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final AccountsRepository accountsRepository;
@@ -41,7 +49,6 @@ public class AccountsManagementService implements AccountsManagementInterface {
     private final Cache pinVerificationCache;
     private final Cache verificationCache;
 
-    // Constructor
     public AccountsManagementService (
 
         MessageSource messageSource,
@@ -67,6 +74,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         this.verificationCache = cacheManager.getCache("verificationCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Override
     public UUID createUniqueId(){

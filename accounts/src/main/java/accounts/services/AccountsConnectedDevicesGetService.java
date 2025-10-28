@@ -4,6 +4,7 @@ import accounts.dtos.AccountsCacheRefreshTokenDTO;
 import accounts.dtos.AccountsCacheRefreshTokensListDTO;
 import accounts.dtos.AccountsCacheRefreshTokensListMetaDTO;
 import accounts.exceptions.ErrorHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -18,7 +19,12 @@ import java.util.*;
 @Service
 public class AccountsConnectedDevicesGetService {
 
-    // attributes
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final CacheManager cacheManager;
@@ -27,7 +33,6 @@ public class AccountsConnectedDevicesGetService {
     private final RestTemplate restTemplate;
     private final AccountsManagementService accountsManagementService;
 
-    // constructor
     public AccountsConnectedDevicesGetService(
 
         MessageSource messageSource,
@@ -47,8 +52,8 @@ public class AccountsConnectedDevicesGetService {
         this.accountsManagementService = accountsManagementService;
 
     }
+    // ===================================================== ( constructor end )
 
-    // execute
     @SuppressWarnings("unchecked")
     public ResponseEntity execute(
 
@@ -159,8 +164,8 @@ public class AccountsConnectedDevicesGetService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/connected-devices");
-        customLinks.put("next", "/accounts/profile-get");
+        customLinks.put("self", "/" + accountsBaseURL + "/connected-devices");
+        customLinks.put("next", "/" + accountsBaseURL + "/profile-get");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

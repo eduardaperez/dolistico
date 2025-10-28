@@ -8,6 +8,7 @@ import accounts.persistence.entities.AccountsEntity;
 import accounts.persistence.repositories.AccountsLogRepository;
 import accounts.persistence.repositories.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -23,7 +24,14 @@ import java.util.Optional;
 @Service
 public class AccountsActivateService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final AccountsManagementService accountsManagementService;
     private final ErrorHandler errorHandler;
@@ -34,7 +42,6 @@ public class AccountsActivateService {
     private final Cache verificationCache;
     private final Cache notActivatedAccountCache;
 
-    // constructor
     public AccountsActivateService (
 
         MessageSource messageSource,
@@ -58,6 +65,7 @@ public class AccountsActivateService {
         this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -150,8 +158,8 @@ public class AccountsActivateService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/activate-email");
-        customLinks.put("next", "/accounts/login");
+        customLinks.put("self", "/" + accountsBaseURL + "/activate-email");
+        customLinks.put("next", "/" + accountsBaseURL + "/login");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

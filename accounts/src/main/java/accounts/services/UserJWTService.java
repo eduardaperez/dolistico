@@ -17,14 +17,17 @@ import java.util.Map;
 @Component
 public class UserJWTService {
 
-    // JWT lifespan
-    private static final long EXPIRATION_TIME = 120000; // 2 minutes
-
+    // Env
+    // -------------------------------------------------------------------------
     @Value("${PRIVATE_KEY}")
     private String privateKey;
-
-    // Create credentials
     // -------------------------------------------------------------------------
+
+    // JWT lifespan
+    // -------------------------------------------------------------------------
+    private static final long EXPIRATION_TIME = 120000; // 2 minutes
+    // -------------------------------------------------------------------------
+
     public String createCredential(
 
         Map<String, String> claims
@@ -53,6 +56,5 @@ public class UserJWTService {
         }
 
     }
-    // -------------------------------------------------------------------------
 
 }

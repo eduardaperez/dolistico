@@ -8,6 +8,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsEntity;
 import accounts.persistence.repositories.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -22,9 +23,16 @@ import java.util.*;
 @Service
 public class AccountsDeleteService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final AccountsManagementService accountsManagementService;
-    private final EncryptionService encryptionService;
     private final AccountsRepository accountsRepository;
     private final ErrorHandler errorHandler;
     private final Cache deletedAccountByUserCache;
@@ -32,12 +40,10 @@ public class AccountsDeleteService {
     private final Cache profileCache;
     private final Cache addressCache;
 
-    // constructor
     public AccountsDeleteService(
 
         MessageSource messageSource,
         AccountsManagementService accountsManagementService,
-        EncryptionService encryptionService,
         AccountsRepository accountsRepository,
         ErrorHandler errorHandler,
         CacheManager cacheManager
@@ -46,7 +52,6 @@ public class AccountsDeleteService {
 
         this.messageSource = messageSource;
         this.accountsManagementService = accountsManagementService;
-        this.encryptionService = encryptionService;
         this.accountsRepository = accountsRepository;
         this.errorHandler = errorHandler;
         this.deletedAccountByUserCache = cacheManager.getCache("deletedAccountByUserCache");
@@ -55,6 +60,7 @@ public class AccountsDeleteService {
         this.profileCache = cacheManager.getCache("profileCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -176,8 +182,8 @@ public class AccountsDeleteService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/delete");
-        customLinks.put("next", "/accounts/signup");
+        customLinks.put("self", "/" + accountsBaseURL + "/delete");
+        customLinks.put("next", "/" + accountsBaseURL + "/signup");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)

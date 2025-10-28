@@ -28,10 +28,17 @@ import java.util.*;
 @Service
 public class AccountsCreateService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+    // -------------------------------------------------------------------------
 
-    // constructor
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final EncryptionService encryptionService;
@@ -63,6 +70,7 @@ public class AccountsCreateService {
         this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -248,8 +256,8 @@ public class AccountsCreateService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/signup");
-        customLinks.put("next", "/accounts/activate-email");
+        customLinks.put("self", "/" + accountsBaseURL + "/signup");
+        customLinks.put("next", "/" + accountsBaseURL + "/activate-email");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(201)

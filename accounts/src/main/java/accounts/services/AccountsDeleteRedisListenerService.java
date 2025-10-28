@@ -19,6 +19,8 @@ import java.util.UUID;
 @Component
 public class AccountsDeleteRedisListenerService implements MessageListener {
 
+    // ==================================================== ( constructor init )
+
     private final AccountsRepository accountsRepository;
     private final AccountsProfileRepository accountsProfileRepository;
     private final AccountsManagementService accountsManagementService;
@@ -42,6 +44,7 @@ public class AccountsDeleteRedisListenerService implements MessageListener {
         this.accountsDeletedRepository = accountsDeletedRepository;
 
     }
+    // ===================================================== ( constructor end )
 
     // Delete account (user decision)
     @Override

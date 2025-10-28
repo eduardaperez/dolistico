@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountsKafkaService {
 
-    // constructor
-    // =========================================================================
+    // ==================================================== ( constructor init )
     private final KafkaTemplate<String, SendEmailDataDTO> kafkaTemplate;
 
     public AccountsKafkaService(
@@ -21,7 +20,7 @@ public class AccountsKafkaService {
         this.kafkaTemplate = kafkaTemplate;
 
     }
-    // =========================================================================
+    // ===================================================== ( constructor end )
 
     // producer
     public void sendSimpleEmailMessage(

@@ -5,6 +5,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsAddressEntity;
 import accounts.persistence.repositories.AccountsAddressRepository;
 import accounts.persistence.repositories.AccountsProfileRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,14 +19,20 @@ import java.util.*;
 @Service
 public class AccountsAddressDeleteService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsAddressRepository accountsAddressRepository;
     private final CacheManager cacheManager;
     private final Cache jwtCache;
 
-    // constructor
     public AccountsAddressDeleteService(
 
         MessageSource messageSource,
@@ -43,6 +50,7 @@ public class AccountsAddressDeleteService {
         this.jwtCache = cacheManager.getCache("addressCache");
 
     }
+    // ===================================================== ( constructor end )
 
     // execute
     @CacheEvict(value = "addressCache", key = "#credentialsData['id']")
@@ -87,8 +95,8 @@ public class AccountsAddressDeleteService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/address-delete");
-        customLinks.put("next", "/accounts/address-get");
+        customLinks.put("self", "/" + accountsBaseURL + "/address-delete");
+        customLinks.put("next", "/" + accountsBaseURL + "/address-get");
 
         // Response
         StandardResponseService response = new StandardResponseService.Builder()

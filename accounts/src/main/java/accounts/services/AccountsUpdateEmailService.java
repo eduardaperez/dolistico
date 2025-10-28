@@ -8,6 +8,7 @@ import accounts.exceptions.ErrorHandler;
 import accounts.persistence.entities.AccountsEntity;
 import accounts.persistence.repositories.AccountsRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
@@ -23,6 +24,14 @@ import java.util.*;
 @Service
 public class AccountsUpdateEmailService {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    @Value("${ACCOUNTS_BASE_URL}")
+    private String accountsBaseURL;
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
     private final AccountsManagementService accountsManagementService;
     private final EncryptionService encryptionService;
@@ -31,7 +40,6 @@ public class AccountsUpdateEmailService {
     private final Cache pinVerificationCache;
     private final Cache verificationCache;
 
-    // constructor
     public AccountsUpdateEmailService(
 
         MessageSource messageSource,
@@ -52,6 +60,7 @@ public class AccountsUpdateEmailService {
         this.verificationCache = cacheManager.getCache("verificationCache");
 
     }
+    // ===================================================== ( constructor end )
 
     @Transactional
     public ResponseEntity execute(
@@ -203,8 +212,8 @@ public class AccountsUpdateEmailService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/accounts/update-email");
-        customLinks.put("next", "/accounts/login");
+        customLinks.put("self", "/" + accountsBaseURL + "/update-email");
+        customLinks.put("next", "/" + accountsBaseURL + "/login");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)
