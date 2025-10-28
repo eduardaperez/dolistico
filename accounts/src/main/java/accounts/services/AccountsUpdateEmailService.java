@@ -60,6 +60,7 @@ public class AccountsUpdateEmailService {
         this.verificationCache = cacheManager.getCache("verificationCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

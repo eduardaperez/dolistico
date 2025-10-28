@@ -52,6 +52,7 @@ public class AccountsConnectedDevicesGetService {
         this.accountsManagementService = accountsManagementService;
 
     }
+
     // ===================================================== ( constructor end )
 
     @SuppressWarnings("unchecked")

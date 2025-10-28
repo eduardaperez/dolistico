@@ -19,11 +19,11 @@ import java.util.Optional;
 @Validated
 class AccountsActivateController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsActivateService accountsActivateService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsActivateController(
 
         AccountsActivateService accountsActivateService,
@@ -35,6 +35,8 @@ class AccountsActivateController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/activate-account")
     public ResponseEntity handle(

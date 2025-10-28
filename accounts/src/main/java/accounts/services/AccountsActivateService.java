@@ -65,6 +65,7 @@ public class AccountsActivateService {
         this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

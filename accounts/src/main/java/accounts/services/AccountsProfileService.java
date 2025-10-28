@@ -47,6 +47,7 @@ public class AccountsProfileService {
         this.profileCache = cacheManager.getCache("profileCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     public ResponseEntity execute(

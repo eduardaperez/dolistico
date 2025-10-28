@@ -55,6 +55,7 @@ public class AccountsAvatarCreateService {
         Files.createDirectories(this.uploadDir);
 
     }
+
     // ===================================================== ( constructor end )
 
     @CacheEvict(value = "profileCache", key = "#credentialsData['id']")

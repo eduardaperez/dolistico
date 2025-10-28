@@ -18,10 +18,10 @@ import java.util.Map;
 @Validated
 class AccountsAddressCreateController {
 
-    // Service
+    // ==================================================== ( constructor init )
+    
     private final AccountsAddressCreateService accountsAddressCreateService;
 
-    // constructor
     public AccountsAddressCreateController(
 
         AccountsAddressCreateService accountsAddressCreateService
@@ -31,6 +31,8 @@ class AccountsAddressCreateController {
         this.accountsAddressCreateService = accountsAddressCreateService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/create-address")
     @SuppressWarnings("unchecked")

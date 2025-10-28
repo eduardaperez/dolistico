@@ -70,6 +70,7 @@ public class AccountsUpdatePasswordService {
         this.deletedAccountByUserCache = cacheManager.getCache("deletedAccountByUserCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

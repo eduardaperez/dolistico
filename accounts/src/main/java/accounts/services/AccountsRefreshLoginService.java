@@ -56,6 +56,7 @@ public class AccountsRefreshLoginService {
         this.refreshLoginCache = cacheManager.getCache("refreshLoginCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

@@ -57,6 +57,7 @@ public class AccountsLinkUpdatePasswordService {
         this.encryptionService  = encryptionService;
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

@@ -9,15 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExecuteEmailService {
 
-    // atributes
+    // ==================================================== ( constructor init )
     private final JavaMailSender javaMailSender;
 
-    // constructor
-    public ExecuteEmailService (
-        JavaMailSender javaMailSender
-    ) {
+    public ExecuteEmailService (JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
+    // ===================================================== ( constructor end )
 
     @Async
     public void sendSimpleEmail(

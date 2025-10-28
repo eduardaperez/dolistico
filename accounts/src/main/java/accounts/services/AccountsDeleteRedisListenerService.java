@@ -44,6 +44,7 @@ public class AccountsDeleteRedisListenerService implements MessageListener {
         this.accountsDeletedRepository = accountsDeletedRepository;
 
     }
+
     // ===================================================== ( constructor end )
 
     // Delete account (user decision)

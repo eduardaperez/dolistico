@@ -1,5 +1,6 @@
 package helloworld.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +13,21 @@ import java.util.Map;
 @Service
 public class HelloWorldService {
 
-    // attributes
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+
     private final MessageSource messageSource;
 
-    // constructor
     public HelloWorldService(
         MessageSource messageSource
     ) {
         this.messageSource = messageSource;
     }
+
+    // ===================================================== ( constructor end )
 
     public ResponseEntity execute(
         String message

@@ -13,21 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping()
 class DocumentationController {
 
+    // ==================================================== ( constructor init )
+
+    // Env
+    // -------------------------------------------------------------------------
     @Value("${APPLICATION_TITLE}")
     private String applicationTitle;
 
     @Value("http://${PUBLIC_DOMAIN}")
     private String publicDomain;
+    // -------------------------------------------------------------------------
 
-    // attributes
     private final DocumentationJson documentationJson;
 
-    //constructor
     public DocumentationController (
         DocumentationJson documentationJson
     ) {
         this.documentationJson = documentationJson;
     }
+    // ===================================================== ( constructor end )
 
     @GetMapping(
         value = "/${DOCUMENTATION_BASE_URL}/json",

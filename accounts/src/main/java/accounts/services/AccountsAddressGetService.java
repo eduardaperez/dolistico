@@ -49,6 +49,7 @@ public class AccountsAddressGetService {
         this.jwtCache = cacheManager.getCache("addressCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @SuppressWarnings("unchecked")

@@ -19,11 +19,11 @@ import java.util.Optional;
 @Validated
 class AccountsUpdatePasswordController {
 
-    // Attributes
+    // ==================================================== ( constructor init )
+
     private final AccountsUpdatePasswordService accountsUpdatePasswordService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsUpdatePasswordController(
 
         AccountsUpdatePasswordService accountsUpdatePasswordService,
@@ -35,6 +35,8 @@ class AccountsUpdatePasswordController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PatchMapping("/${ACCOUNTS_BASE_URL}/update-password")
     public ResponseEntity handle(

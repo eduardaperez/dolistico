@@ -18,10 +18,10 @@ import java.util.Map;
 @Validated
 class AccountsAddressDeleteController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsAddressDeleteService accountsAddressDeleteService;
 
-    // constructor
     public AccountsAddressDeleteController(
 
         AccountsAddressDeleteService accountsAddressDeleteService
@@ -31,6 +31,8 @@ class AccountsAddressDeleteController {
         this.accountsAddressDeleteService = accountsAddressDeleteService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @DeleteMapping("//${ACCOUNTS_BASE_URL}/delete-address")
     @SuppressWarnings("unchecked")

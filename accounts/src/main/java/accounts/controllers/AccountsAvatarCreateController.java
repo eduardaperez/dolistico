@@ -14,6 +14,8 @@ import java.util.Map;
 @RestController
 public class AccountsAvatarCreateController {
 
+    // ==================================================== ( constructor init )
+
     private final AccountsAvatarCreateService accountsAvatarCreateService;
 
     public AccountsAvatarCreateController (
@@ -25,6 +27,8 @@ public class AccountsAvatarCreateController {
         this.accountsAvatarCreateService = accountsAvatarCreateService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/upload-avatar")
     @SuppressWarnings("unchecked")

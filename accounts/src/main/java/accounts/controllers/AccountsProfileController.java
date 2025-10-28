@@ -14,10 +14,10 @@ import java.util.Map;
 @Validated
 class AccountsProfileController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsProfileService accountsProfileService;
 
-    // constructor
     public AccountsProfileController(
 
         AccountsProfileService accountsProfileService
@@ -27,6 +27,8 @@ class AccountsProfileController {
         this.accountsProfileService = accountsProfileService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @GetMapping("/${ACCOUNTS_BASE_URL}/get-profile")
     @SuppressWarnings("unchecked")

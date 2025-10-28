@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 class AccountsCreateController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsCreateService accountsCreateService;
 
-    // constructor
     public AccountsCreateController(
         AccountsCreateService accountsCreateService
     ) {
         this.accountsCreateService = accountsCreateService;
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/signup")
     public ResponseEntity handle(

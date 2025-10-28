@@ -60,6 +60,7 @@ public class AccountsDeleteService {
         this.profileCache = cacheManager.getCache("profileCache");
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

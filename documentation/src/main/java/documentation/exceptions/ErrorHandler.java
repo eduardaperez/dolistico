@@ -1,5 +1,6 @@
 package documentation.exceptions;
 
+import documentation.services.StandardResponseService;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,20 +19,16 @@ import java.util.regex.Pattern;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    // logs
-    private static final Logger logger = LoggerFactory.getLogger(
-        ErrorHandler.class
-    );
-
-    // attributes
+    // ==================================================== ( constructor init )
+    private static final Logger logger = LoggerFactory.getLogger(ErrorHandler.class);
     private final MessageSource messageSource;
 
-    // constructor
     public ErrorHandler ( MessageSource messageSource ) {
         this.messageSource = messageSource;
     }
+    // ===================================================== ( constructor end )
 
-    // error throw
+    // ==================================================== ( error throw init )
     public void customErrorThrow (
 
         int errorCode,
@@ -50,7 +46,9 @@ public class ErrorHandler {
         throw new RuntimeException(errorDetails.toString());
 
     }
+    // ===================================================== ( error throw end )
 
+    // ========================================== ( handle all exceptions init )
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleAllExceptions(
 
@@ -61,7 +59,7 @@ public class ErrorHandler {
         // locale
         Locale locale = LocaleContextHolder.getLocale();
 
-        // dtos error
+        // dto error
         if (error instanceof ConstraintViolationException) {
 
             var violations = ((ConstraintViolationException) error)
@@ -102,7 +100,7 @@ public class ErrorHandler {
 
         ) {
 
-            helloworld.utils.StandardResponseService response = new helloworld.utils.StandardResponseService.Builder()
+            StandardResponseService response = new StandardResponseService.Builder()
                 .statusCode(400)
                 .statusMessage("error")
                 .message(
@@ -130,7 +128,7 @@ public class ErrorHandler {
                 "}$", ""
             );
 
-            helloworld.utils.StandardResponseService response = new helloworld.utils.StandardResponseService.Builder()
+            StandardResponseService response = new StandardResponseService.Builder()
                 .statusCode(errorCode)
                 .statusMessage("error")
                 .message(errorMessageDetail)
@@ -146,7 +144,7 @@ public class ErrorHandler {
         logger.error(error.toString());
 
         // Fallback response
-        helloworld.utils.StandardResponseService fallbackResponse = new helloworld.utils.StandardResponseService.Builder()
+        StandardResponseService fallbackResponse = new StandardResponseService.Builder()
             .statusCode(500)
             .statusMessage("error")
             .message(
@@ -161,5 +159,6 @@ public class ErrorHandler {
             .body(fallbackResponse);
 
     }
+    // =========================================== ( handle all exceptions end )
 
 }

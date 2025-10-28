@@ -18,10 +18,10 @@ import java.util.Map;
 @Validated
 class AccountsLinkUpdateEmailController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsLinkUpdateEmailService accountsLinkUpdateEmailService;
 
-    // constructor
     public AccountsLinkUpdateEmailController(
 
         AccountsLinkUpdateEmailService accountsLinkUpdateEmailService
@@ -31,6 +31,8 @@ class AccountsLinkUpdateEmailController {
         this.accountsLinkUpdateEmailService = accountsLinkUpdateEmailService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/update-email-link")
     @SuppressWarnings("unchecked")

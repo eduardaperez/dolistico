@@ -15,10 +15,10 @@ import java.util.Map;
 @Validated
 class AccountsConnectedDevicesGetController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsConnectedDevicesGetService accountsConnectedDevicesGetService;
 
-    // constructor
     public AccountsConnectedDevicesGetController(
 
         AccountsConnectedDevicesGetService accountsConnectedDevicesGetService
@@ -28,6 +28,8 @@ class AccountsConnectedDevicesGetController {
         this.accountsConnectedDevicesGetService = accountsConnectedDevicesGetService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @GetMapping("/${ACCOUNTS_BASE_URL}/connected-devices")
     @SuppressWarnings("unchecked")

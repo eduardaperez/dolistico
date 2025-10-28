@@ -18,10 +18,10 @@ import java.util.Map;
 @Validated
 class AccountsProfileUpdateController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsProfileUpdateService accountsProfileUpdateService;
 
-    // constructor
     public AccountsProfileUpdateController(
 
         AccountsProfileUpdateService accountsProfileUpdateService
@@ -31,6 +31,8 @@ class AccountsProfileUpdateController {
         this.accountsProfileUpdateService = accountsProfileUpdateService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PutMapping("/${ACCOUNTS_BASE_URL}/update-profile")
     @SuppressWarnings("unchecked")

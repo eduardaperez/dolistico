@@ -1,4 +1,4 @@
-package helloworld.utils;
+package documentation.services;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -77,8 +77,10 @@ public class StandardResponseService {
             return this;
         }
 
-        public helloworld.utils.StandardResponseService build() {
-            return new helloworld.utils.StandardResponseService(this);
+        public StandardResponseService build() {
+            return new StandardResponseService(this);
         }
+
     }
+
 }

@@ -17,11 +17,11 @@ import java.util.Optional;
 @Validated
 class AccountsDeleteController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsDeleteService accountsDeleteService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsDeleteController(
 
         AccountsDeleteService accountsDeleteService,
@@ -33,6 +33,8 @@ class AccountsDeleteController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @DeleteMapping("/${ACCOUNTS_BASE_URL}/delete")
     @SuppressWarnings("unchecked")

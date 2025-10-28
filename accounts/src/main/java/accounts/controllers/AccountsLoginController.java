@@ -19,11 +19,11 @@ import java.util.Optional;
 @Validated
 class AccountsLoginController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsLoginService accountsLoginService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsLoginController(
 
         AccountsLoginService accountsLoginService,
@@ -35,6 +35,8 @@ class AccountsLoginController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/login")
     public ResponseEntity handle(

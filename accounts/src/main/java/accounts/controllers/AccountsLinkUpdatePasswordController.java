@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 class AccountsLinkUpdatePasswordController {
 
-    // Service
-    private final AccountsLinkUpdatePasswordService
-        accountsLinkUpdatePasswordService;
+    // ==================================================== ( constructor init )
 
-    // constructor
+    private final AccountsLinkUpdatePasswordService accountsLinkUpdatePasswordService;
+
     public AccountsLinkUpdatePasswordController(
         AccountsLinkUpdatePasswordService accountsLinkUpdatePasswordService
     ) {
         this.accountsLinkUpdatePasswordService =
             accountsLinkUpdatePasswordService;
     }
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/update-password-link")
     public ResponseEntity handle(

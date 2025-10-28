@@ -19,11 +19,11 @@ import java.util.Optional;
 @Validated
 class AccountsRefreshLoginController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsRefreshLoginService accountsRefreshLoginService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsRefreshLoginController(
 
         AccountsRefreshLoginService accountsRefreshLoginService,
@@ -35,6 +35,8 @@ class AccountsRefreshLoginController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/refresh-login")
     public ResponseEntity handle(

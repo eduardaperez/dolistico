@@ -57,6 +57,7 @@ public class AccountsLinkDeleteService {
         this.encryptionService  = encryptionService;
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

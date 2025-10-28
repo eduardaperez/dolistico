@@ -20,11 +20,11 @@ import java.util.Optional;
 @Validated
 class AccountsUpdateEmailController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsUpdateEmailService accountsUpdateEmailService;
     private final AccountsRequestDTO accountsRequestDTO;
 
-    // constructor
     public AccountsUpdateEmailController(
 
         AccountsUpdateEmailService accountsUpdateEmailService,
@@ -36,6 +36,8 @@ class AccountsUpdateEmailController {
         this.accountsRequestDTO = accountsRequestDTO;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @PatchMapping("/${ACCOUNTS_BASE_URL}/update-email")
     @SuppressWarnings("unchecked")

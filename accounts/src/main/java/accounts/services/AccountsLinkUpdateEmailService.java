@@ -54,6 +54,7 @@ public class AccountsLinkUpdateEmailService {
         this.accountsRepository = accountsRepository;
 
     }
+
     // ===================================================== ( constructor end )
 
     @Transactional

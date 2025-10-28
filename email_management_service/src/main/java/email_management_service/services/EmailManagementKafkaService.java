@@ -16,8 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class EmailManagementKafkaService {
 
-    // constructor
-    // =========================================================================
+    // ==================================================== ( constructor init )
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ExecuteEmailService executeEmailService;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,7 +35,7 @@ public class EmailManagementKafkaService {
         this.validator = validator;
 
     }
-    // =========================================================================
+    // ===================================================== ( constructor end )
 
     // consumer
     @KafkaListener(

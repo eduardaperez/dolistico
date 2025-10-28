@@ -14,10 +14,10 @@ import java.util.Map;
 @Validated
 class AccountsAddressGetController {
 
-    // Service
+    // ==================================================== ( constructor init )
+
     private final AccountsAddressGetService accountsAddressGetService;
 
-    // constructor
     public AccountsAddressGetController(
 
         AccountsAddressGetService accountsAddressGetService
@@ -27,6 +27,8 @@ class AccountsAddressGetController {
         this.accountsAddressGetService = accountsAddressGetService;
 
     }
+
+    // ===================================================== ( constructor end )
 
     @GetMapping("/${ACCOUNTS_BASE_URL}/get-address")
     @SuppressWarnings("unchecked")
