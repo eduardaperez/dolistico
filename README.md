@@ -56,7 +56,7 @@ Dolistico is a lightweight and scalable microservice for managing to-do tasks, b
 - **JWT** and **Refresh Tokens** for secure user sessions.
 
 ### 6. **API Documentation**
-- The API is fully documented using **Swagger** and **Redocly**, making it easy to test and understand the endpoints.
+- The API is fully documented using **Elements**, **Swagger** and **Redocly**, making it easy to test and understand the endpoints.
 
 ### 7. **Error Management**
 - Robust **error handling** system with proper exception capture and responses for client requests.
