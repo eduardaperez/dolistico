@@ -124,6 +124,12 @@ public class AccountsProfileUpdateService {
                 );
             }
 
+            if (accountsProfileUpdateDTO.theme() != null) {
+                profileUpdated.setTheme(
+                    accountsProfileUpdateDTO.theme()
+                );
+            }
+
             accountsProfileRepository.save(profileUpdated);
 
         }

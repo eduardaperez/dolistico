@@ -15,5 +15,6 @@ public class AccountsProfileDTO {
     private String birthdate;
     private String biography;
     private String language;
+    private String theme;
 
 }

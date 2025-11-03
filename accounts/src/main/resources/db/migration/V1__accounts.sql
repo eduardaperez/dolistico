@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS accounts.user_profile (
     birthdate VARCHAR(50),
     biography VARCHAR(256),
     profile_image VARCHAR(555),
-    language VARCHAR(50)
+    language VARCHAR(50),
+    theme VARCHAR(100)
 );
 
 -- USER LOGS

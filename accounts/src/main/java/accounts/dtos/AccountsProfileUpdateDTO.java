@@ -43,6 +43,11 @@ public record AccountsProfileUpdateDTO(
     @Size(min = 1, message = "{validation_is_required}")
     @Size(max = 50, message = "{validation_many_characters}")
     @Pattern(regexp = "^[a-zA-Z-]*$", message = "{validation_disallowed_characters}")
-    String language
+    String language,
+
+    @Size(min = 1, message = "{validation_is_required}")
+    @Size(max = 100, message = "{validation_many_characters}")
+    @Pattern(regexp = "^[a-zA-Z-]*$", message = "{validation_disallowed_characters}")
+    String theme
 
 ) {}

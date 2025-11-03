@@ -102,6 +102,7 @@ public class AccountsProfileService {
             dtoProfile.setBiography(entity.getBiography());
             dtoProfile.setProfileImage(entity.getProfileImage());
             dtoProfile.setLanguage(entity.getLanguage());
+            dtoProfile.setTheme(entity.getTheme());
 
             profileCache.put(idUser, dtoProfile);
 

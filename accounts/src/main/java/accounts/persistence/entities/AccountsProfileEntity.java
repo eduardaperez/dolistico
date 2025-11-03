@@ -53,4 +53,7 @@ public class AccountsProfileEntity {
     @Column(length = 50, nullable = true)
     private String language;
 
+    @Column(length = 100, nullable = true)
+    private String theme;
+
 }
