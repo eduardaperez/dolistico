@@ -9,6 +9,7 @@ public class DocumentationJson {
 
     // Env
     // -------------------------------------------------------------------------
+
     @Value("${APPLICATION_TITLE}")
     private String applicationTitle;
 
@@ -28,18 +29,24 @@ public class DocumentationJson {
         return """
             Dolistico is a lightweight and scalable microservice for managing to-do tasks, built with Java and Spring. Designed to integrate seamlessly into a microservices architecture, it allows users to create, update, delete, and organize personal tasks and agendas securely. With support for JWT authentication, user account management, and features like due dates, categorization, and ownership enforcement, Dolistico ensures that task management is both secure and efficient.
 
+            
+            
             ## Base URL
 
             ```
             https://PUBLIC_DOMAIN_REPLACE
             ```
 
+            
+            
             ## Localization (Translation)
 
             Any response containing the "message" field in the body will have 
             its message translated server-side, based on the language specified 
             in the request header, for the supported languages.
 
+            
+            
             ## Common responses from services
 
             **Authentication Error (401):**
@@ -78,6 +85,8 @@ public class DocumentationJson {
             }
             ```
 
+            
+            
             ## API Gateway Errors (No translation support)
 
             **Service Unavailable (503):**
