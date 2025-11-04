@@ -4,8 +4,10 @@ import accounts.exceptions.ErrorHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -26,9 +28,17 @@ public class EncryptionService {
     private String secretKey;
     // -------------------------------------------------------------------------
 
+    // Argon v2
+    private static final PasswordEncoder encoder = new Argon2PasswordEncoder(
+        16,  // salt length (bytes)
+        32,              // hash length (bytes)
+        2,               // parallelism (threads)
+        131072,          // memory (KB) -> 64MB
+        6                // iterations
+    );
+
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
-    private static final BCryptPasswordEncoder encoderPassword = new BCryptPasswordEncoder(10);
     private static final SecureRandom secureRandom = new SecureRandom();
     private SecretKey aesKey;
 
@@ -129,7 +139,7 @@ public class EncryptionService {
     // ==================================================== (Password hash init)
     public String hashPassword(String password) {
 
-        String hashedPassword = encoderPassword.encode(password);
+        String hashedPassword = encoder.encode(password);
 
         return hashedPassword;
 
@@ -139,7 +149,7 @@ public class EncryptionService {
     // ================================================ (Compare passwords init)
     public boolean matchPasswords(String password, String storedHash) {
 
-        boolean passwordsCompared = encoderPassword.matches(
+        boolean passwordsCompared = encoder.matches(
             password,
             storedHash
         );

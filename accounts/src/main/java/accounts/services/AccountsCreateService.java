@@ -83,6 +83,11 @@ public class AccountsCreateService {
         // language
         Locale locale = LocaleContextHolder.getLocale();
 
+        // Encrypted email
+        String encryptedEmail = encryptionService.encrypt(
+            accountsCreateDTO.email().toLowerCase()
+        );
+
         // Verify and authorize URL
         // ---------------------------------------------------------------------
         boolean isAllowedURL = false;
@@ -199,6 +204,27 @@ public class AccountsCreateService {
             newProfile.setName(accountsCreateDTO.name());
             accountsProfileRepository.save(newProfile);
 
+            // Create token
+            String tokenGenerated = accountsManagementService.createVerificationToken(
+                findUser.isPresent() ? findUser.get().getId() : generatedUniqueId,
+                AccountsUpdateEnum.ACTIVATE_ACCOUNT
+            );
+
+            // Link
+            String linkFinal = UriComponentsBuilder
+                .fromHttpUrl(accountsCreateDTO.link())
+                .queryParam("email", encryptedEmail)
+                .queryParam("token", tokenGenerated)
+                .build()
+                .toUriString();
+
+            // send email
+            accountsManagementService.sendEmailStandard(
+                accountsCreateDTO.email().toLowerCase(),
+                EmailResponsesEnum.ACTIVATE_ACCOUNT_SUCCESS,
+                linkFinal
+            );
+
             // Set cache
             notActivatedAccountCache.put(generatedUniqueId, nowUtc);
 
@@ -214,11 +240,6 @@ public class AccountsCreateService {
             !findUser.get().isBanned()
 
         ) {
-
-            // Encrypted email
-            String encryptedEmail = encryptionService.encrypt(
-                accountsCreateDTO.email().toLowerCase()
-            );
 
             // Delete all old tokens
             accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
