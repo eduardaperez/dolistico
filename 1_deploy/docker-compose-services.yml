@@ -45,27 +45,43 @@ services:
     networks:
       - spring_net
 
-  redpanda:
-    image: redpandadata/redpanda
-    container_name: redpanda
-    command:
-      - redpanda start
-      - --overprovisioned
-      - --smp 1
-      - --memory 1G
-      - --reserve-memory 0M
-      - --node-id 0
-      - --kafka-addr PLAINTEXT://0.0.0.0:9092,SASL_PLAINTEXT://0.0.0.0:9093
-      - --advertise-kafka-addr PLAINTEXT://redpanda:9092,SASL_PLAINTEXT://redpanda:9093
-      - --pandaproxy-addr 0.0.0.0:8082
-      - --advertise-pandaproxy-addr redpanda:8082
-      - --set redpanda.enable_sasl=true
-      - --set redpanda.superusers=["admin"]
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    env_file:
+      - .env
     ports:
-      - "9093:9093"    # Kafka API (SASL)
+      - 9092:9092
+      - 29093:29093
     environment:
-      - REDPANDA_AUTO_CREATE_TOPICS=false
-      - REDPANDA_ENABLE_SASL=true
+      # Cluster Configuration
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      CLUSTER_ID: xxxxxxxxxx
+      
+      # Listeners Configuration
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      
+      # Security Configuration - SASL/PLAIN
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_LISTENER_NAME_SASL_PLAINTEXT_PLAIN_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="" password="" ";
+      
+      # Broker Settings
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+    
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     networks:
       - spring_net
 
@@ -111,7 +127,7 @@ services:
     depends_on:
       - accounts_database
       - accounts_redis
-      - redpanda
+      - kafka
       - email_management_service
 
   tasks:
@@ -130,7 +146,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  redpanda_data:
+  kafka_data:
 
 networks:
   spring_net:
