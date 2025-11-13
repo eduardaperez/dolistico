@@ -1,6 +1,7 @@
 package email_management_service.services;
 
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExecuteEmailService {
+
+    @Value("${EMAIL_ADDRESS_USER}")
+    private String fromEmail;
 
     // ==================================================== ( constructor init )
     private final JavaMailSender javaMailSender;
@@ -31,6 +35,7 @@ public class ExecuteEmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mailMessage = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
+            mailMessage.setFrom(fromEmail);
             mailMessage.setTo(recipient);
             mailMessage.setSubject(subject);
             mailMessage.setText(message, true);
