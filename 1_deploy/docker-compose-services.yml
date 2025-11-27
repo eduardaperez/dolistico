@@ -5,10 +5,10 @@ services:
     image: hashicorp/vault:1.15.2
     container_name: vault
     ports:
-      - "8200:8200"
+      - "${VAULT_PORT}:${VAULT_PORT}"
     environment:
-      VAULT_ADDR: "http://vault:8200"
-      VAULT_API_ADDR: "http://vault:8200"
+      VAULT_ADDR: "http://vault:${VAULT_PORT}"
+      VAULT_API_ADDR: "http://vault:${VAULT_PORT}"
     cap_add:
       - IPC_LOCK
     networks:
@@ -30,14 +30,9 @@ services:
     env_file:
       - .env
     ports:
-      - "80:80"
+      - "${NGINX_PORT}:${NGINX_PORT}"
     networks:
       - spring_net
-    depends_on:
-      - documentation
-      - helloworld
-      - accounts
-      - tasks
     healthcheck:
       test: [ "CMD", "curl", "-f", "-A", "Docker-Healthcheck", "http://nginx/nginx-status" ]
       interval: 30s
@@ -53,15 +48,15 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_ADMIN_USER}
       POSTGRES_PASSWORD: ${DATABASE_ADMIN_PASSWORD}
-      POSTGRES_DB: ${DATABASE_ADMIN_NAME}
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${DATABASE_NAME}
+    expose:
+      - "${DATABASE_PORT}"
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - database_data:/var/lib/postgresql
     networks:
       - spring_net
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_ADMIN_USER} -d ${DATABASE_ADMIN_NAME}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_ADMIN_USER} -d ${DATABASE_NAME}" ]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -76,17 +71,17 @@ services:
       "redis-server",
       "--port", "6379",
       "--requirepass",
-      "${CACHEMANAGER_PASSWORD}",
+      "${CACHEMANAGER_ADMIN_PASSWORD}",
       "--notify-keyspace-events", "Ex"
     ]
     volumes:
       - cachemanager_data:/data
     expose:
-      - "6379"
+      - "${CACHEMANAGER_PORT}"
     networks:
       - spring_net
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli -a ${CACHEMANAGER_PASSWORD} PING | grep PONG" ]
+      test: [ "CMD-SHELL", "redis-cli -a ${CACHEMANAGER_ADMIN_PASSWORD} PING | grep PONG" ]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -106,32 +101,12 @@ services:
       - --advertise-kafka-addr PLAINTEXT://datastreaming:9092
     volumes:
       - datastreaming_data:/var/lib/redpanda/data
-    ports:
-      - "9092:9092"
+    expose:
+      - "${DATASTRAMING_PORT}"
     networks:
       - spring_net
     healthcheck:
       test: [ "CMD-SHELL", "bash -c 'echo > /dev/tcp/datastreaming/9092'" ]
-      interval: 30s
-      retries: 5
-      start_period: 10s
-      timeout: 10s
-
-  emailservice:
-    container_name: emailservice
-    build: ../emailservice
-    env_file:
-      - .env
-    expose:
-      - "${EMAILSERVICE_PORT}"
-    networks:
-      - spring_net
-    depends_on:
-      - database
-      - cachemanager
-      - datastreaming
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://emailservice:${EMAILSERVICE_PORT}/actuator/health" ]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -160,7 +135,7 @@ services:
     env_file:
       - .env
     build: ../helloworld
-    ports:
+    expose:
       - "${HELLOWORLD_PORT}:${HELLOWORLD_PORT}"
     networks:
       - spring_net
@@ -171,7 +146,24 @@ services:
       start_period: 10s
       timeout: 10s
 
-  # #####
+  emailservice:
+    container_name: emailservice
+    build: ../emailservice
+    env_file:
+      - .env
+    expose:
+      - "${EMAILSERVICE_PORT}"
+    networks:
+      - spring_net
+    depends_on:
+      - datastreaming
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://emailservice:${EMAILSERVICE_PORT}/actuator/health" ]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
   accounts:
     container_name: accounts
     build: ../accounts
@@ -219,7 +211,7 @@ services:
 
 volumes:
   vault_data:
-  postgres_data:
+  database_data:
   cachemanager_data:
   datastreaming_data:
 

@@ -12,25 +12,29 @@ http {
     keepalive_timeout 65;
     tcp_nopush on;
     tcp_nodelay on;
-
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
+    resolver 127.0.0.11 ipv6=off valid=30s;
 
     # ---------------------------------------------------------- (load balancer init)
     upstream documentation_backend {
-        server documentation:${DOCUMENTATION_PORT};
+        zone documentation_backend 64k;
+        server documentation:${DOCUMENTATION_PORT} resolve;
     }
 
     upstream helloworld_backend {
-        server helloworld:${HELLOWORLD_PORT};
+        zone helloworld_backend 64k;
+        server helloworld:${HELLOWORLD_PORT} resolve;
     }
 
     upstream accounts_backend {
-        server accounts:${ACCOUNTS_PORT};
+        zone accounts_backend 64k;
+        server accounts:${ACCOUNTS_PORT} resolve;
     }
 
     upstream tasks_backend {
-        server tasks:${TASKS_PORT};
+        zone tasks_backend 64k;
+        server tasks:${TASKS_PORT} resolve;
     }
     # ----------------------------------------------------------- (load balancer end)
 
