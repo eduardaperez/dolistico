@@ -1,6 +1,3 @@
--- CREATE SCHEMA
-CREATE SCHEMA IF NOT EXISTS accounts;
-
 -- ACCOUNTS
 CREATE TABLE IF NOT EXISTS accounts.user_account (
     id UUID PRIMARY KEY,

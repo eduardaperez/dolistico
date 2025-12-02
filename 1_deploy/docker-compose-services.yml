@@ -29,8 +29,8 @@ services:
       POSTGRES_USER: ${DATABASE_ADMIN_USER}
       POSTGRES_PASSWORD: ${DATABASE_ADMIN_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
-    expose:
-      - "${DATABASE_PORT}"
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - database_data:/var/lib/postgresql
       - ./config/database/init.sh:/docker-entrypoint-initdb.d/init.sh
@@ -48,15 +48,16 @@ services:
     env_file:
       - .env
     image: redis:latest
-    command: [
-      "redis-server",
-      "--port", "6379",
-      "--requirepass",
-      "${CACHEMANAGER_ADMIN_PASSWORD}",
-      "--notify-keyspace-events", "Ex"
-    ]
+    command: >
+      bash -c "
+        redis-server --port 6379 --requirepass ${CACHEMANAGER_ADMIN_PASSWORD} --notify-keyspace-events Ex &
+        sleep 3 &&
+        /docker-entrypoint-initdb.d/init.sh &&
+        wait
+      "
     volumes:
       - cachemanager_data:/data
+      - ./config/cachemanager/init.sh:/docker-entrypoint-initdb.d/init.sh
     expose:
       - "${CACHEMANAGER_PORT}"
     networks:
