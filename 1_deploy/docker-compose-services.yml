@@ -50,7 +50,7 @@ services:
     image: redis:latest
     command: >
       bash -c "
-        redis-server --port 6379 --requirepass ${CACHEMANAGER_ADMIN_PASSWORD} --notify-keyspace-events Ex &
+        redis-server --port 6379 --notify-keyspace-events Ex &
         sleep 3 &&
         /docker-entrypoint-initdb.d/init.sh &&
         wait
@@ -63,7 +63,7 @@ services:
     networks:
       - spring_net
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli -a ${CACHEMANAGER_ADMIN_PASSWORD} PING | grep PONG" ]
+      test: [ "CMD-SHELL", "redis-cli PING | grep PONG" ]
       interval: 30s
       retries: 5
       start_period: 10s
