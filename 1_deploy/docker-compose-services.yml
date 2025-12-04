@@ -58,8 +58,8 @@ services:
     volumes:
       - cachemanager_data:/data
       - ./config/cachemanager/init.sh:/docker-entrypoint-initdb.d/init.sh
-    expose:
-      - "${CACHEMANAGER_PORT}"
+    ports:
+      - "${CACHEMANAGER_PORT}:${CACHEMANAGER_PORT}"
     networks:
       - spring_net
     healthcheck:
