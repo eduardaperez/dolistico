@@ -50,7 +50,7 @@ services:
     image: redis:latest
     command: |
       bash -c '
-        redis-server --port 6379 --notify-keyspace-events Ex &
+        redis-server --port ${CACHEMANAGER_PORT} --notify-keyspace-events Ex &
         REDIS_PID=$!
         sleep 2
         /docker-entrypoint-initdb.d/init.sh
