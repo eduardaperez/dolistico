@@ -50,15 +50,24 @@ services:
     image: redis:latest
     command: |
       bash -c '
+        echo "[CACHE MANAGER] Fixing permissions...";
+        sed -i "s/\r$//" /init/init.sh
+        chmod +x /init/init.sh
+
+        echo "[CACHE MANAGER] Starting Redis...";
         redis-server --port ${CACHEMANAGER_PORT} --notify-keyspace-events Ex &
+
         REDIS_PID=$!
         sleep 2
-        /docker-entrypoint-initdb.d/init.sh
+
+        echo "[CACHE MANAGER] Running init script..."
+        /init/init.sh
+
         wait $REDIS_PID
       '
     volumes:
       - cachemanager_data:/data
-      - ./config/cachemanager/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./config/cachemanager:/init
     ports:
       - "${CACHEMANAGER_PORT}:${CACHEMANAGER_PORT}"
     networks:
