@@ -46,8 +46,8 @@ public class AccountsConnectedDevicesGetService {
         this.messageSource = messageSource;
         this.errorHandler = errorHandler;
         this.cacheManager = cacheManager;
-        this.ArrayLoginsCache = cacheManager.getCache("ArrayLoginsCache");
-        this.refreshLoginCache = cacheManager.getCache("refreshLoginCache");
+        this.ArrayLoginsCache = cacheManager.getCache("accounts-ArrayLoginsCache");
+        this.refreshLoginCache = cacheManager.getCache("accounts-refreshLoginCache");
         this.restTemplate = restTemplate;
         this.accountsManagementService = accountsManagementService;
 

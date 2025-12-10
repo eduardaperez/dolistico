@@ -184,7 +184,7 @@ services:
     deploy:
       replicas: 1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://accounts:${ACCOUNTS_PORT}/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:${ACCOUNTS_PORT}/actuator/health" ]
       interval: 30s
       retries: 5
       start_period: 10s

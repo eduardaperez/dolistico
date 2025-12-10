@@ -67,7 +67,7 @@ public class AccountsCreateService {
         this.accountsProfileRepository = accountsProfileRepository;
         this.accountsManagementService = accountsManagementService;
         this.cacheManager = cacheManager;
-        this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
+        this.notActivatedAccountCache = cacheManager.getCache("accounts-notActivatedAccountCache");
 
     }
 

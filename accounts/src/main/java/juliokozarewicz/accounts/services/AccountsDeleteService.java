@@ -54,10 +54,10 @@ public class AccountsDeleteService {
         this.accountsManagementService = accountsManagementService;
         this.accountsRepository = accountsRepository;
         this.errorHandler = errorHandler;
-        this.deletedAccountByUserCache = cacheManager.getCache("deletedAccountByUserCache");
-        this.verificationCache = cacheManager.getCache("verificationCache");
-        this.addressCache = cacheManager.getCache("addressCache");
-        this.profileCache = cacheManager.getCache("profileCache");
+        this.deletedAccountByUserCache = cacheManager.getCache("accounts-deletedAccountByUserCache");
+        this.verificationCache = cacheManager.getCache("accounts-verificationCache");
+        this.addressCache = cacheManager.getCache("accounts-addressCache");
+        this.profileCache = cacheManager.getCache("accounts-profileCache");
 
     }
 

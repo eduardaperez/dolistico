@@ -46,7 +46,7 @@ public class AccountsAddressGetService {
         this.errorHandler = errorHandler;
         this.accountsAddressRepository = accountsAddressRepository;
         this.cacheManager = cacheManager;
-        this.jwtCache = cacheManager.getCache("addressCache");
+        this.jwtCache = cacheManager.getCache("accounts-addressCache");
 
     }
 

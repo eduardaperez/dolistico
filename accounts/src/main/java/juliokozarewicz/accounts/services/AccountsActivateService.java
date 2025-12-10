@@ -61,8 +61,8 @@ public class AccountsActivateService {
         this.accountsLogRepository = accountsLogRepository;
         this.encryptionService = encryptionService;
         this.cacheManager = cacheManager;
-        this.verificationCache = cacheManager.getCache("verificationCache");
-        this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
+        this.verificationCache = cacheManager.getCache("accounts-verificationCache");
+        this.notActivatedAccountCache = cacheManager.getCache("accounts-notActivatedAccountCache");
 
     }
 

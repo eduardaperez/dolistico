@@ -65,9 +65,9 @@ public class AccountsUpdatePasswordService {
         this.accountsManagementService = accountsManagementService;
         this.accountsLogRepository = accountsLogRepository;
         this.cacheManager = cacheManager;
-        this.verificationCache = cacheManager.getCache("verificationCache");
-        this.notActivatedAccountCache = cacheManager.getCache("notActivatedAccountCache");
-        this.deletedAccountByUserCache = cacheManager.getCache("deletedAccountByUserCache");
+        this.verificationCache = cacheManager.getCache("accounts-verificationCache");
+        this.notActivatedAccountCache = cacheManager.getCache("accounts-notActivatedAccountCache");
+        this.deletedAccountByUserCache = cacheManager.getCache("accounts-deletedAccountByUserCache");
 
     }
 

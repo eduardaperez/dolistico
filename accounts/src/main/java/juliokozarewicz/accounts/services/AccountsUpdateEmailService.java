@@ -56,8 +56,8 @@ public class AccountsUpdateEmailService {
         this.encryptionService = encryptionService;
         this.accountsRepository = accountsRepository;
         this.errorHandler = errorHandler;
-        this.pinVerificationCache = cacheManager.getCache("pinVerificationCache");
-        this.verificationCache = cacheManager.getCache("verificationCache");
+        this.pinVerificationCache = cacheManager.getCache("accounts-pinVerificationCache");
+        this.verificationCache = cacheManager.getCache("accounts-verificationCache");
 
     }
 

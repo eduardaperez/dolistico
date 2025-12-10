@@ -53,7 +53,7 @@ public class AccountsRefreshLoginService {
         this.accountsRepository = accountsRepository;
         this.accountsManagementService = accountsManagementService;
         this.cacheManager = cacheManager;
-        this.refreshLoginCache = cacheManager.getCache("refreshLoginCache");
+        this.refreshLoginCache = cacheManager.getCache("accounts-refreshLoginCache");
 
     }
 

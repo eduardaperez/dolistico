@@ -68,10 +68,10 @@ public class AccountsManagementService implements AccountsManagementInterface {
         this.userJWTService = userJWTService;
         this.accountsKafkaService = accountsKafkaService;
         this.cacheManager = cacheManager;
-        this.refreshLoginCache = cacheManager.getCache("refreshLoginCache");
-        this.ArrayLoginsCache = cacheManager.getCache("ArrayLoginsCache");
-        this.pinVerificationCache = cacheManager.getCache("pinVerificationCache");
-        this.verificationCache = cacheManager.getCache("verificationCache");
+        this.refreshLoginCache = cacheManager.getCache("accounts-refreshLoginCache");
+        this.ArrayLoginsCache = cacheManager.getCache("accounts-ArrayLoginsCache");
+        this.pinVerificationCache = cacheManager.getCache("accounts-pinVerificationCache");
+        this.verificationCache = cacheManager.getCache("accounts-verificationCache");
 
     }
 

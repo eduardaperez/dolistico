@@ -44,7 +44,7 @@ public class AccountsProfileService {
         this.errorHandler = errorHandler;
         this.accountsProfileRepository = accountsProfileRepository;
         this.cacheManager = cacheManager;
-        this.profileCache = cacheManager.getCache("profileCache");
+        this.profileCache = cacheManager.getCache("accounts-profileCache");
 
     }
 
