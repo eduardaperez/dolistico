@@ -20,6 +20,9 @@ BEGIN
 END;
 \$\$;
 
+-- Allow user to connect to the database
+GRANT CONNECT ON DATABASE "${DATABASE_NAME}" TO "${ACCOUNTS_DATABASE_USER}";
+
 -- Make user the owner of the schema
 ALTER SCHEMA "${ACCOUNTS_DATABASE_SCHEMA}" OWNER TO "${ACCOUNTS_DATABASE_USER}";
 
@@ -56,6 +59,9 @@ BEGIN
     END IF;
 END;
 \$\$;
+
+-- Allow user to connect to the database
+GRANT CONNECT ON DATABASE "${DATABASE_NAME}" TO "${TASKS_DATABASE_USER}";
 
 -- Make user the owner of the schema
 ALTER SCHEMA "${TASKS_DATABASE_SCHEMA}" OWNER TO "${TASKS_DATABASE_USER}";
