@@ -44,7 +44,7 @@ public class AccountsProfileUpdateService {
 
     // ===================================================== ( constructor end )
 
-    @CacheEvict(value = "profileCache", key = "#credentialsData['id']")
+    @CacheEvict(value = "accounts-profileCache", key = "#credentialsData['id']")
     public ResponseEntity execute(
 
         Map<String, Object> credentialsData,

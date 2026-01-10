@@ -22,8 +22,8 @@ if [ -n "$ACCOUNTS_CACHEMANAGER_USER" ] && [ -n "$ACCOUNTS_CACHEMANAGER_PASSWORD
       ~accounts-* \
       +@read +@write \
       +publish +subscribe +psubscribe \
-      "&__keyevent@0__:expired" \
-      -scan -keys -type -ttl -pttl -@dangerous -@admin
+      -scan -keys -type -ttl -pttl -@dangerous -@admin \
+      "&__keyevent@0__:expired"
 fi
 # ================================================================== ( accounts end )
 
@@ -37,8 +37,8 @@ if [ -n "$TASKS_CACHEMANAGER_USER" ] && [ -n "$TASKS_CACHEMANAGER_PASSWORD" ]; t
       ~tasks-* \
       +@read +@write \
       +publish +subscribe +psubscribe \
-      "&__keyevent@0__:expired" \
-      -scan -keys -type -ttl -pttl -@dangerous -@admin
+      -scan -keys -type -ttl -pttl -@dangerous -@admin \
+      "&__keyevent@0__:expired"
 fi
 # ===================================================================== ( tasks end )
 
