@@ -45,7 +45,7 @@ public class RedisCacheConfig {
                 new GenericJackson2JsonRedisSerializer(objectMapper)
             );
 
-        // Default cache configuration (2 minutes TTL)
+        // Default cache configuration (5 minutes TTL)
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration
             .defaultCacheConfig()
             .entryTtl(Duration.ofMinutes(5)) // Set default expiration time
