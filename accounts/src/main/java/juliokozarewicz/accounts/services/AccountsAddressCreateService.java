@@ -50,7 +50,7 @@ public class AccountsAddressCreateService {
 
     // ===================================================== ( constructor end )
 
-    @CacheEvict(value = "addressCache", key = "#credentialsData['id']")
+    @CacheEvict(value = "accounts-addressCache", key = "#credentialsData['id']")
     public ResponseEntity execute (
 
         Map<String, Object> credentialsData,

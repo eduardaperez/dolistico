@@ -58,7 +58,7 @@ public class AccountsAvatarCreateService {
 
     // ===================================================== ( constructor end )
 
-    @CacheEvict(value = "profileCache", key = "#credentialsData['id']")
+    @CacheEvict(value = "accounts-profileCache", key = "#credentialsData['id']")
     @Transactional
     public ResponseEntity execute(
 
