@@ -117,7 +117,7 @@ services:
     deploy:
       replicas: 1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://documentation:${DOCUMENTATION_PORT}/actuator/health" ]
+      test: ["CMD-SHELL", "curl -fs http://localhost:${DOCUMENTATION_PORT}/actuator/health/liveness || exit 1"]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -135,7 +135,7 @@ services:
     deploy:
       replicas: 1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://helloworld:${HELLOWORLD_PORT}/actuator/health" ]
+      test: ["CMD-SHELL", "curl -fs http://localhost:${HELLOWORLD_PORT}/actuator/health/liveness || exit 1"]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -156,7 +156,7 @@ services:
     deploy:
       replicas: 1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://emailservice:${EMAILSERVICE_PORT}/actuator/health" ]
+      test: ["CMD-SHELL", "curl -fs http://localhost:${EMAILSERVICE_PORT}/actuator/health/liveness || exit 1"]
       interval: 30s
       retries: 5
       start_period: 10s
@@ -211,7 +211,7 @@ services:
     deploy:
       replicas: 1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://tasks:${TASKS_PORT}/actuator/health" ]
+      test: ["CMD-SHELL", "curl -fs http://localhost:${TASKS_PORT}/actuator/health/liveness || exit 1"]
       interval: 30s
       retries: 5
       start_period: 10s
