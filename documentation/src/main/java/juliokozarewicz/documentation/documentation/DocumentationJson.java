@@ -1837,7 +1837,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/update-email": {
                     "patch": {
                         "summary": "Complete email update process",
-                        "description": "This endpoint allows authenticated users to complete the process of updating their email address. The user must provide their current password, a valid PIN sent to the new email, and a token sent to the current email. Only after verifying all information, the email will be updated.This endpoint allows users to complete the process of updating their email address. The user must log in, as their credentials were revoked in the previous step, and then provide a valid PIN sent to the new email and a token sent to the current email. Only after all information has been verified will the email be updated. The user’s credentials will be revoked again, requiring them to log in with the new email.",
+                        "description": "This endpoint allows the user to complete the process of updating their email address. The user must log in, since their credentials were revoked in the previous step, and then provide a valid PIN sent to the new email address and a token sent to the current email address. Only after all information has been verified will the email be updated. The user’s credentials will be revoked again, requiring them to log in with the new email address.",
                         "tags": [
                             "ACCOUNTS"
                         ],
