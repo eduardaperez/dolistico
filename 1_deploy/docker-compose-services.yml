@@ -80,18 +80,13 @@ services:
 
   streamingmanager:
     container_name: streamingmanager
+    env_file:
+      - .env
     image: redpandadata/redpanda
-    command:
-      - redpanda start
-      - --overprovisioned
-      - --smp 1
-      - --memory 1G
-      - --reserve-memory 0M
-      - --node-id 0
-      - --kafka-addr PLAINTEXT://0.0.0.0:${STREAMINGMANAGER_PORT}
-      - --advertise-kafka-addr PLAINTEXT://streamingmanager:${STREAMINGMANAGER_PORT}
+    entrypoint: ["bash", "/config/streamingmanager/init.sh"]
     volumes:
       - streamingmanager_data:/var/lib/redpanda/data
+      - ./config/streamingmanager/init.sh:/config/streamingmanager/init.sh
     expose:
       - "${STREAMINGMANAGER_PORT}"
     networks:
