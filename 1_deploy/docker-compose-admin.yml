@@ -26,6 +26,16 @@ services:
       && vault server -config=/vault/config/vault.hcl
       '
 
+  redpanda-console:
+    image: redpandadata/console:latest
+    container_name: redpanda-console
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: "streamingmanager:${STREAMINGMANAGER_PORT}"
+    networks:
+      - spring_net
+
 volumes:
   vault_data:
 
