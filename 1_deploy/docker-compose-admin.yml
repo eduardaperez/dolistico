@@ -33,6 +33,14 @@ services:
       - "8080:8080"
     environment:
       KAFKA_BROKERS: "streamingmanager:${STREAMINGMANAGER_PORT}"
+
+      # SASL/SCRAM CONFIG
+      KAFKA_TLS_ENABLED: "false"
+      KAFKA_SASL_ENABLED: "true"
+      KAFKA_SASL_MECHANISM: "SCRAM-SHA-256"
+      KAFKA_SASL_USERNAME: "${STREAMINGMANAGER_ADMIN_USER}"
+      KAFKA_SASL_PASSWORD: "${STREAMINGMANAGER_ADMIN_PASSWORD}"
+
     networks:
       - spring_net
 
