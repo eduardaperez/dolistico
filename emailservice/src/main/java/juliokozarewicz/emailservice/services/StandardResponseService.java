@@ -1,9 +1,8 @@
-package juliokozarewicz.emailmanagementservice.services;
+package juliokozarewicz.emailservice.services;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 

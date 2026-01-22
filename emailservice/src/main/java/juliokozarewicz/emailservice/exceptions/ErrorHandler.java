@@ -1,6 +1,6 @@
-package juliokozarewicz.emailmanagementservice.exceptions;
+package juliokozarewicz.emailservice.exceptions;
 
-import juliokozarewicz.emailmanagementservice.services.StandardResponseService;
+import juliokozarewicz.emailservice.services.StandardResponseService;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

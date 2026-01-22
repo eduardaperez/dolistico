@@ -1,4 +1,4 @@
-package juliokozarewicz.emailmanagementservice.configurations;
+package juliokozarewicz.emailservice.configurations;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -18,4 +18,5 @@ public class MessageConfig {
         return messageSource;
 
     }
+
 }

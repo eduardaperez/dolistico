@@ -152,14 +152,36 @@ public class AccountsManagementService implements AccountsManagementInterface {
         // add link if exist
         if (link != null && !link.isEmpty()) {
             boolean isUrl = link.startsWith("http://") || link.startsWith("https://");
-            messageEmail.append("<b>")
-                .append(isUrl ? "<a href=\"" + link + "\" target=\"_blank\">" + link + "</a>" : link)
-                .append("</b><br><br>");
+            messageEmail.append("<b>").append(
+
+                isUrl ?
+
+                    "<a href=\"" + link + "\" target=\"_blank\" " +
+                    "style=\"display:inline-block;" +
+                    "background-color:#000000;" +
+                    "color:#ffffff;" +
+                    "padding:12px 20px;" +
+                    "text-decoration:none;" +
+                    "border-radius:8px;" +
+                    "border:3px solid #ffffff;" +
+                    "font-weight:bold;" +
+                    "font-family:Arial, sans-serif;\">" +
+                    messageSource.getMessage(
+                        "email_click_here_link", null, locale
+                    ) +
+                    "</a>"
+
+                : link
+
+            ).append("</b><br><br>");
+
         }
 
         // Close
-        messageEmail.append(messageSource.getMessage(
-            "email_closing", null, locale)
+        messageEmail.append(
+            messageSource.getMessage(
+                "email_closing", null, locale
+            )
         ).append("<br>").append(applicationTitle.toUpperCase());
 
         String subject = "[ " + applicationTitle.toUpperCase() + " ] - " + messageSource.

@@ -1,4 +1,4 @@
-package juliokozarewicz.emailmanagementservice.dtos;
+package juliokozarewicz.emailservice.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

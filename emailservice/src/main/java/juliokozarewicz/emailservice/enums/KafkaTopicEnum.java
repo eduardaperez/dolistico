@@ -1,4 +1,4 @@
-package juliokozarewicz.emailmanagementservice.enums;
+package juliokozarewicz.emailservice.enums;
 
 public final class KafkaTopicEnum {
 

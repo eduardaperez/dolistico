@@ -1,9 +1,9 @@
-package juliokozarewicz.emailmanagementservice.services;
+package juliokozarewicz.emailservice.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import juliokozarewicz.emailmanagementservice.dtos.SendEmailDataDTO;
-import juliokozarewicz.emailmanagementservice.enums.KafkaGroupEnum;
-import juliokozarewicz.emailmanagementservice.enums.KafkaTopicEnum;
+import juliokozarewicz.emailservice.dtos.SendEmailDataDTO;
+import juliokozarewicz.emailservice.enums.KafkaGroupEnum;
+import juliokozarewicz.emailservice.enums.KafkaTopicEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -41,9 +41,9 @@ public class EmailManagementKafkaService {
     @KafkaListener(
 
         topics = KafkaTopicEnum.SEND_SIMPLE_EMAIL,
-        groupId = KafkaGroupEnum.emailmanagementservice,
+        groupId = KafkaGroupEnum.emailservice,
         properties = {
-            "spring.json.value.default.type=juliokozarewicz.emailmanagementservice.dtos.SendEmailDataDTO"
+            "spring.json.value.default.type=juliokozarewicz.emailservice.dtos.SendEmailDataDTO"
         }
 
     )

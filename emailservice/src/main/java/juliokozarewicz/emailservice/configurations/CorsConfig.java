@@ -1,4 +1,4 @@
-package juliokozarewicz.emailmanagementservice.configurations;
+package juliokozarewicz.emailservice.configurations;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

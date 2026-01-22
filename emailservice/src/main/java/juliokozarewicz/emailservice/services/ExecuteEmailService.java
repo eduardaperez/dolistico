@@ -1,4 +1,4 @@
-package juliokozarewicz.emailmanagementservice.services;
+package juliokozarewicz.emailservice.services;
 
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
