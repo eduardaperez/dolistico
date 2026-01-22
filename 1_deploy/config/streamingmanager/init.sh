@@ -52,17 +52,24 @@ rpk acl user create "${ACCOUNTS_STREAMINGMANAGER_USER}" \
   --mechanism SCRAM-SHA-256 || true
 # -----------------------------------------------------------------------------------
 
+# Common topics
+# -----------------------------------------------------------------------------------
 rpk acl create \
   --allow-principal "User:${ACCOUNTS_STREAMINGMANAGER_USER}" \
-  --operation ALL \
-  --topic "*" \
+  --operation WRITE \
+  --topic send.simple.email.v1 \
   --resource-pattern-type literal || true
 
 rpk acl create \
   --allow-principal "User:${ACCOUNTS_STREAMINGMANAGER_USER}" \
-  --operation ALL \
-  --group "*" \
+  --operation DESCRIBE \
+  --topic send.simple.email.v1 \
   --resource-pattern-type literal || true
+# -----------------------------------------------------------------------------------
+
+# Service topics
+# -----------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 
 ############################################################### ( Accounts user end )
 
