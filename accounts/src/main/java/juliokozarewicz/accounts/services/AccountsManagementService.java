@@ -152,7 +152,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         // add link if exist
         if (link != null && !link.isEmpty()) {
             boolean isUrl = link.startsWith("http://") || link.startsWith("https://");
-            messageEmail.append("<br>b>").append(
+            messageEmail.append("<br><b>").append(
 
                 isUrl ?
 
@@ -182,7 +182,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
                     "    </tr>" +
                     "</table>"
 
-                : link
+                : link + "<br>"
 
             ).append("</b><br><br>");
 
