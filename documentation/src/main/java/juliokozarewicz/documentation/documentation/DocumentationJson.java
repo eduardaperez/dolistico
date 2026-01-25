@@ -44,7 +44,7 @@ public class DocumentationJson {
             ## Base URL
 
             ```
-            https://PUBLIC_DOMAIN_REPLACE
+            http://PUBLIC_DOMAIN_REPLACE
             ```
             
             
@@ -56,7 +56,7 @@ public class DocumentationJson {
             response examples, and explanations of the data models used.
             Access it here:
             ```
-            https://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE
+            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE
             ```
             
             In addition to direct access to the official documentation, 
@@ -68,7 +68,7 @@ public class DocumentationJson {
             quickly exploring requests, responses, and available operations.
             Access it here:
             ```
-            https://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/swagger
+            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/swagger
             ```
             
             ### Redocly:
@@ -77,7 +77,7 @@ public class DocumentationJson {
             endpoints, schemas, and examples.
             Access it here:
             ```
-            https://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/redocly
+            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/redocly
             ```
             
             
@@ -302,7 +302,7 @@ public class DocumentationJson {
                                             "link": {
                                                 "type": "string",
                                                 "description": "A valid URL that will be included in the activation email.",
-                                                "example": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+                                                "example": "http://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
                                             }
                                         },
                                         "required": [
@@ -488,7 +488,7 @@ public class DocumentationJson {
                                             "link": {
                                                 "type": "string",
                                                 "description": "The URL to which the user will be redirected to update the password.",
-                                                "example": "https://example.com/update-password"
+                                                "example": "http://example.com/update-password"
                                             }
                                         },
                                         "required": [
@@ -941,7 +941,7 @@ public class DocumentationJson {
                                                     "properties": {
                                                         "profileImage": {
                                                             "type": "string",
-                                                            "example": "https://example.com/image.jpg"
+                                                            "example": "http://example.com/image.jpg"
                                                         },
                                                         "name": {
                                                             "type": "string",
@@ -1780,7 +1780,7 @@ public class DocumentationJson {
                                                 "type": "string",
                                                 "format": "uri",
                                                 "description": "Base URL where the user will be redirected to confirm the email update.",
-                                                "example": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+                                                "example": "http://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
                                             }
                                         }
                                     }
@@ -2090,7 +2090,7 @@ public class DocumentationJson {
                                                 "type": "string",
                                                 "format": "uri",
                                                 "description": "Base URL where the confirmation link will redirect. The system appends a unique token as a query parameter.",
-                                                "example": "https://example.com/delete-confirmation"
+                                                "example": "http://example.com/delete-confirmation"
                                             }
                                         }
                                     }
