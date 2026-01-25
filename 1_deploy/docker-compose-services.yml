@@ -184,7 +184,6 @@ services:
       start_period: 10s
       timeout: 10s
 
-  # #####
   tasks:
     container_name: tasks
     build: ../tasks
