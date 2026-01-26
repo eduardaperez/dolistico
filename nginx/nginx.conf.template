@@ -275,8 +275,8 @@ http {
             limit_req zone=general_zone burst=3 nodelay;
         }
 
-        # [ ACCOUNTS - Login Pin ]
-        location /${ACCOUNTS_BASE_URL}/login-pin {
+        # [ ACCOUNTS - Login Confirmation ]
+        location /${ACCOUNTS_BASE_URL}/login-confirmation {
             proxy_pass http://accounts_backend;
             limit_req zone=general_zone burst=1 nodelay;
         }

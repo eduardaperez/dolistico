@@ -218,10 +218,14 @@ public class AccountsManagementService implements AccountsManagementInterface {
         // Get hash
         String hashFinal = encryptionService.createToken();
 
+        // Meta DTO
+        AccountsCacheLoginConfirmationMetaDTO accountsCacheLoginConfirmationMetaDTO = new AccountsCacheLoginConfirmationMetaDTO();
+        accountsCacheLoginConfirmationMetaDTO.setIdUser(idUser.toString());
+
         // Redis cache (hashFinal)
         loginTokenCache.put(
-            idUser + "::" + hashFinal,
-            null
+            hashFinal,
+            accountsCacheLoginConfirmationMetaDTO
         );
 
         return hashFinal;
