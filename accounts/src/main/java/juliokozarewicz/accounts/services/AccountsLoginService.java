@@ -58,8 +58,6 @@ public class AccountsLoginService {
     @Transactional
     public ResponseEntity execute(
 
-        String userIp,
-        String userAgent,
         AccountsLoginDTO accountsLoginDTO
 
     ) {
@@ -168,9 +166,25 @@ public class AccountsLoginService {
 
         // Create user login token
         // ---------------------------------------------------------------------
-        String userLoginToken=  accountsManagementService.createVerificationToken(
+        String userLoginToken=  accountsManagementService.createLoginToken(
+            findUser.get().getId()
+        );
+        // ---------------------------------------------------------------------
+
+        // Create user pin and sent
+        // ---------------------------------------------------------------------
+        // Create pin cache
+        String pinGenerated = accountsManagementService.createVerificationPin(
             findUser.get().getId(),
-            AccountsUpdateEnum.LOGIN_ACCOUNT
+            AccountsUpdateEnum.LOGIN_ACCOUNT,
+            accountsLoginDTO.email().toLowerCase()
+        );
+
+        // Send pin to email
+        accountsManagementService.sendEmailStandard(
+            accountsLoginDTO.email().toLowerCase(),
+            EmailResponsesEnum.LOGIN_PIN,
+            pinGenerated
         );
         // ---------------------------------------------------------------------
 
@@ -189,6 +203,13 @@ public class AccountsLoginService {
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)
             .statusMessage("success")
+            .message(
+                messageSource.getMessage(
+                    "response_login_credentials_success",
+                    null,
+                    locale
+                )
+            )
             .data(tokensData)
             .links(customLinks)
             .build();

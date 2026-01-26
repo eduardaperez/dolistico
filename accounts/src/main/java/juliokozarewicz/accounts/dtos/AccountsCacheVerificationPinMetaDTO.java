@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AccountsCacheVerificationPinMetaDTO {
 
-    private String verificationPin;
     private String reason;
     private Object meta;
 

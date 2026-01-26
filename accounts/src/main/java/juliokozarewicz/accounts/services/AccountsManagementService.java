@@ -43,10 +43,11 @@ public class AccountsManagementService implements AccountsManagementInterface {
     private final UserJWTService userJWTService;
     private final AccountsKafkaService accountsKafkaService;
     private final CacheManager cacheManager;
-    private final Cache ArrayLoginsCache;
+    private final Cache arrayLoginsCache;
     private final Cache refreshLoginCache;
     private final Cache pinVerificationCache;
     private final Cache verificationCache;
+    private final Cache loginTokenCache;
 
     public AccountsManagementService (
 
@@ -68,7 +69,8 @@ public class AccountsManagementService implements AccountsManagementInterface {
         this.accountsKafkaService = accountsKafkaService;
         this.cacheManager = cacheManager;
         this.refreshLoginCache = cacheManager.getCache("accounts-refreshLoginCache");
-        this.ArrayLoginsCache = cacheManager.getCache("accounts-ArrayLoginsCache");
+        this.arrayLoginsCache = cacheManager.getCache("accounts-arrayLoginsCache");
+        this.loginTokenCache = cacheManager.getCache("accounts-loginCache");
         this.pinVerificationCache = cacheManager.getCache("accounts-pinVerificationCache");
         this.verificationCache = cacheManager.getCache("accounts-verificationCache");
 
@@ -211,24 +213,15 @@ public class AccountsManagementService implements AccountsManagementInterface {
     }
 
     @Override
-    public String createVerificationToken(UUID idUser, String reason) {
+    public String createLoginToken(UUID idUser) {
 
         // Get hash
         String hashFinal = encryptionService.createToken();
 
-        // Verification DTO
-        AccountsCacheVerificationTokenMetaDTO verificationDTO =
-            new AccountsCacheVerificationTokenMetaDTO();
-            verificationDTO.setVerificationToken(hashFinal);
-            verificationDTO.setReason(reason);
-
-        // Clean old verification token
-        verificationCache.evict(idUser);
-
-        // Redis cache (hashFinal and reason in metadata)
-        verificationCache.put(
-            idUser,
-            verificationDTO
+        // Redis cache (hashFinal)
+        loginTokenCache.put(
+            idUser + "::" + hashFinal,
+            null
         );
 
         return hashFinal;
@@ -244,25 +237,45 @@ public class AccountsManagementService implements AccountsManagementInterface {
 
     ) {
 
-        // Cache key
-        String cacheKeyName = idUser + "::" + reason;
-
         // Create pin
         int pin = new Random().nextInt(900000) + 100000;
         String pinCode = String.valueOf(pin);
 
         AccountsCacheVerificationPinMetaDTO pinDTO =
             new AccountsCacheVerificationPinMetaDTO();
-            pinDTO.setVerificationPin(pinCode);
             pinDTO.setReason(reason);
             pinDTO.setMeta(meta);
 
         pinVerificationCache.put(
-            cacheKeyName,
+            idUser + "::" + pinCode,
             pinDTO
         );
 
         return pinCode;
+
+    }
+
+    @Override
+    public String createVerificationToken(UUID idUser, String reason) {
+
+        // Get hash
+        String hashFinal = encryptionService.createToken();
+
+        // Verification DTO
+        AccountsCacheVerificationTokenMetaDTO verificationDTO = new AccountsCacheVerificationTokenMetaDTO();
+        verificationDTO.setVerificationToken(hashFinal);
+        verificationDTO.setReason(reason);
+
+        // Clean old verification token
+        verificationCache.evict(idUser);
+
+        // Redis cache (hashFinal and reason in metadata)
+        verificationCache.put(
+            idUser,
+            verificationDTO
+        );
+
+        return hashFinal;
 
     }
 
@@ -365,7 +378,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
 
         // Redis cache idUser -> tokens
         // ---------------------------------------------------------------------
-        AccountsCacheRefreshTokensListDTO tokensDTO = ArrayLoginsCache.get(
+        AccountsCacheRefreshTokensListDTO tokensDTO = arrayLoginsCache.get(
             idUser,
             AccountsCacheRefreshTokensListDTO.class
         );
@@ -390,7 +403,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         AccountsCacheRefreshTokensListDTO updatedDTO =
             new AccountsCacheRefreshTokensListDTO(refreshTokensList);
 
-        ArrayLoginsCache.put(idUser, updatedDTO);
+        arrayLoginsCache.put(idUser, updatedDTO);
 
         // --------------------------------------------------------------------
 
@@ -404,7 +417,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         refreshLoginCache.evict(refreshToken);
 
         // Get user's tokens with metadata
-        AccountsCacheRefreshTokensListDTO tokensDTO = ArrayLoginsCache.get(
+        AccountsCacheRefreshTokensListDTO tokensDTO = arrayLoginsCache.get(
             idUser,
             AccountsCacheRefreshTokensListDTO.class
         );
@@ -430,7 +443,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         AccountsCacheRefreshTokensListDTO updatedDTO =
             new AccountsCacheRefreshTokensListDTO(tokensList);
 
-        ArrayLoginsCache.put(idUser, updatedDTO);
+        arrayLoginsCache.put(idUser, updatedDTO);
 
     }
 
@@ -439,7 +452,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
     public void deleteAllRefreshTokensByIdNewTransaction(UUID idUser) {
 
         // Recover all tokens by user id
-        AccountsCacheRefreshTokensListDTO tokensDTO = ArrayLoginsCache.get(
+        AccountsCacheRefreshTokensListDTO tokensDTO = arrayLoginsCache.get(
             idUser,
             AccountsCacheRefreshTokensListDTO.class
         );
@@ -459,7 +472,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         }
 
         // Evict user from the cache after revoking all tokens
-        ArrayLoginsCache.evict(idUser);
+        arrayLoginsCache.evict(idUser);
 
     }
 
@@ -467,7 +480,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
     public void deleteExpiredRefreshTokensListById(UUID idUser) {
 
         // Retrieve all active tokens from the cache for the given user
-        AccountsCacheRefreshTokensListDTO tokensDTO = ArrayLoginsCache.get(
+        AccountsCacheRefreshTokensListDTO tokensDTO = arrayLoginsCache.get(
             idUser,
             AccountsCacheRefreshTokensListDTO.class
         );
@@ -489,7 +502,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         AccountsCacheRefreshTokensListDTO updatedDTO =
             new AccountsCacheRefreshTokensListDTO(tokensList);
 
-        ArrayLoginsCache.put(idUser, updatedDTO);
+        arrayLoginsCache.put(idUser, updatedDTO);
 
     }
 

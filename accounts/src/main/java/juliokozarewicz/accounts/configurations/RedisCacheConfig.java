@@ -93,6 +93,12 @@ public class RedisCacheConfig {
             .disableCachingNullValues()
             .serializeValuesWith(serializationPair);
 
+        // Login Token cache configuration
+        RedisCacheConfiguration loginCacheConfig = RedisCacheConfiguration
+            .defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(5))
+            .serializeValuesWith(serializationPair);
+
         // Not activated account cache configuration
         RedisCacheConfiguration notActivatedAccountConfig = RedisCacheConfiguration
             .defaultCacheConfig()
@@ -115,6 +121,7 @@ public class RedisCacheConfig {
         cacheConfigs.put("accounts-pinVerificationCache", pinVerificationCacheConfig);
         cacheConfigs.put("accounts-ArrayLoginsCache", ArrayLoginsCacheConfig);
         cacheConfigs.put("accounts-verificationCache", verificationCacheConfig);
+        cacheConfigs.put("accounts-loginCache", loginCacheConfig);
         cacheConfigs.put("accounts-notActivatedAccountCache", notActivatedAccountConfig);
         cacheConfigs.put("accounts-deletedAccountByUserCache", deletedAccountByUserConfig);
 

@@ -104,39 +104,33 @@ public class AccountsUpdateEmailService {
 
         // find old email and pin
         AccountsCacheVerificationPinMetaDTO pinDTO = null;
-        if (findOldUser.isPresent()) {
-            pinDTO = Optional
-                .ofNullable(pinVerificationCache.get(findOldUser.get().getId()))
-                .map(Cache.ValueWrapper::get)
-                .map(AccountsCacheVerificationPinMetaDTO.class::cast)
-                .filter(
-                    tokenMeta -> accountsUpdateEmailDTO
-                        .pin().equals(tokenMeta.getVerificationPin())
-                )
-                .filter(
-                    tokenMeta -> tokenMeta
-                    .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
-                )
-                .orElse(null);
-        }
+        String pinLoginCacheKey = findOldUser.get().getId() + "::" + accountsUpdateEmailDTO.pin();
+        pinDTO = Optional
+            .ofNullable(pinVerificationCache.get(pinLoginCacheKey))
+            .map(Cache.ValueWrapper::get)
+            .map(AccountsCacheVerificationPinMetaDTO.class::cast)
+            .filter(
+                tokenMeta -> tokenMeta
+                .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
+            )
+            .orElse(null);
 
         // find old email and token
         AccountsCacheVerificationTokenMetaDTO findOldEmailAndToken = null;
-        if (findOldUser.isPresent()) {
-            findOldEmailAndToken = Optional
-                .ofNullable(verificationCache.get(findOldUser.get().getId()))
-                .map(Cache.ValueWrapper::get)
-                .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
-                .filter(
-                    tokenMeta -> accountsUpdateEmailDTO
-                        .token().equals(tokenMeta.getVerificationToken())
-                )
-                .filter(
-                    tokenMeta -> tokenMeta
-                        .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
-                )
-                .orElse(null);
-        }
+        findOldEmailAndToken = Optional
+            .ofNullable(verificationCache.get(findOldUser.get().getId()))
+            .map(Cache.ValueWrapper::get)
+            .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
+            .filter(
+                tokenMeta -> accountsUpdateEmailDTO
+                    .token().equals(tokenMeta.getVerificationToken())
+            )
+            .filter(
+                tokenMeta -> tokenMeta
+                    .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
+            )
+            .orElse(null);
+
 
         // If token or email not found return error
         if ( pinDTO == null || findOldEmailAndToken == null ) {
@@ -201,6 +195,8 @@ public class AccountsUpdateEmailService {
             findOldUser.get().getId()
         );
 
+        // Revoke current pin
+        pinVerificationCache.evict(pinLoginCacheKey);
         // ---------------------------------------------------------------------
 
         // Response
