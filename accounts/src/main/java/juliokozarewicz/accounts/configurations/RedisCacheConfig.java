@@ -82,7 +82,7 @@ public class RedisCacheConfig {
         // Pin verification cache configuration
         RedisCacheConfiguration pinVerificationCacheConfig = RedisCacheConfiguration
             .defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(5))
+            .entryTtl(Duration.ofMinutes(10))
             .disableCachingNullValues()
             .serializeValuesWith(serializationPair);
 
