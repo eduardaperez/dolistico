@@ -1,12 +1,12 @@
 package juliokozarewicz.accounts.services;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import juliokozarewicz.accounts.dtos.*;
 import juliokozarewicz.accounts.interfaces.AccountsManagementInterface;
 import juliokozarewicz.accounts.persistence.entities.AccountsEntity;
 import juliokozarewicz.accounts.persistence.entities.AccountsLogEntity;
 import juliokozarewicz.accounts.persistence.repositories.AccountsLogRepository;
 import juliokozarewicz.accounts.persistence.repositories.AccountsRepository;
-import com.github.f4b6a3.uuid.UuidCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -29,12 +29,11 @@ public class AccountsManagementService implements AccountsManagementInterface {
 
     // Env
     // -------------------------------------------------------------------------
-    @Value("${ACCOUNTS_BASE_URL}")
-    private String accountsBaseURL;
 
     // Attributes
     @Value("${APPLICATION_TITLE}")
     private String applicationTitle;
+
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
@@ -242,9 +241,6 @@ public class AccountsManagementService implements AccountsManagementInterface {
         String reason,
         Object meta
     ) {
-
-        // Clean all old pin's
-        pinVerificationCache.evict(idUser);
 
         // Create pin
         int pin = new Random().nextInt(900000) + 100000;

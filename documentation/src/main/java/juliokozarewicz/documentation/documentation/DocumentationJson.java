@@ -670,6 +670,82 @@ public class DocumentationJson {
             .append(
                 """
                 # ==============================================================
+                "/ACCOUNTS_BASE_URL_REPLACE/login-pin": {
+                    "post": {
+                        "summary": "Send login PIN to email",
+                        "description": "This endpoint initiates the login process by generating and sending a one-time verification PIN to the provided email address. If the email exists in the system, a PIN will be generated and sent. If it does not exist, the response will still be successful to prevent user enumeration attacks.",
+                        "tags": [
+                            "ACCOUNTS"
+                        ],
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "required": [
+                                            "email"
+                                        ],
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "description": "User email address used to receive the login PIN.",
+                                                "example": "user@example.com",
+                                                "maxLength": 255
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Login PIN sent successfully.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 200
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "success"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "A code was sent to your email. Use it to access your account."
+                                                },
+                                                "links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "type": "string",
+                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/login-pin"
+                                                        },
+                                                        "next": {
+                                                            "type": "string",
+                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/login"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                """
+            )
+
+            .append(
+                """
+                # ==============================================================
                 "/ACCOUNTS_BASE_URL_REPLACE/login": {
                     "post": {
                         "summary": "Authenticate user login",

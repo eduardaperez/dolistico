@@ -67,23 +67,23 @@ public class AccountsPinLoginService {
             accountsPinLoginDTO.email()
         );
 
-        // Pin to login
-        // ---------------------------------------------------------------------
+        if (findUser.isPresent()) {
 
-        // Create pin cache
-        String pinGenerated = accountsManagementService.createVerificationPin(
-            findUser.get().getId(),
-            AccountsUpdateEnum.LOGIN_ACCOUNT,
-            accountsPinLoginDTO.email()
-        );
+            // Create pin cache
+            String pinGenerated = accountsManagementService.createVerificationPin(
+                findUser.get().getId(),
+                AccountsUpdateEnum.LOGIN_ACCOUNT,
+                accountsPinLoginDTO.email()
+            );
 
-        // Send pin to email
-        accountsManagementService.sendEmailStandard(
-            accountsPinLoginDTO.email().toLowerCase(),
-            EmailResponsesEnum.LOGIN_PIN,
-            pinGenerated
-        );
-        // ---------------------------------------------------------------------
+            // Send pin to email
+            accountsManagementService.sendEmailStandard(
+                accountsPinLoginDTO.email().toLowerCase(),
+                EmailResponsesEnum.LOGIN_PIN,
+                pinGenerated
+            );
+
+        }
 
         // Response
         // ---------------------------------------------------------------------
