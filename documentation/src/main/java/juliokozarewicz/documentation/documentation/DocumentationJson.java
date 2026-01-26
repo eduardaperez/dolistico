@@ -669,87 +669,10 @@ public class DocumentationJson {
 
             .append(
                 """
-                # ==============================================================
-                "/ACCOUNTS_BASE_URL_REPLACE/login-pin": {
-                    "post": {
-                        "summary": "Send login PIN to email",
-                        "description": "This endpoint initiates the login process by generating and sending a one-time verification PIN to the provided email address. If the email exists in the system, a PIN will be generated and sent. If it does not exist, the response will still be successful to prevent user enumeration attacks.",
-                        "tags": [
-                            "ACCOUNTS"
-                        ],
-                        "requestBody": {
-                            "required": true,
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "required": [
-                                            "email"
-                                        ],
-                                        "properties": {
-                                            "email": {
-                                                "type": "string",
-                                                "format": "email",
-                                                "description": "User email address used to receive the login PIN.",
-                                                "example": "user@example.com",
-                                                "maxLength": 255
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "responses": {
-                            "200": {
-                                "description": "Login PIN sent successfully.",
-                                "content": {
-                                    "application/json": {
-                                        "schema": {
-                                            "type": "object",
-                                            "properties": {
-                                                "statusCode": {
-                                                    "type": "integer",
-                                                    "example": 200
-                                                },
-                                                "statusMessage": {
-                                                    "type": "string",
-                                                    "example": "success"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "A code was sent to your email. Use it to access your account."
-                                                },
-                                                "links": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "self": {
-                                                            "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/login-pin"
-                                                        },
-                                                        "next": {
-                                                            "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/login"
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                """
-            )
-
-            .append(
-                """
-                # ==============================================================
                 "/ACCOUNTS_BASE_URL_REPLACE/login": {
                     "post": {
                         "summary": "Authenticate user login",
-                        "description": "This endpoint allows users to log in using their email and password. If the credentials are valid and the account is active, access and refresh tokens are returned. Otherwise, an appropriate error is returned based on the account status.",
+                        "description": "This endpoint uses the user's email and password to validate credentials. If the credentials are correct and the account is active, a login token is generated and returned. This token must then be used along with the numeric PIN sent to the user's email to complete the login process. If the credentials are invalid, the account is banned, or deactivated, an appropriate error response is returned.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -781,7 +704,7 @@ public class DocumentationJson {
                         },
                         "responses": {
                             "200": {
-                                "description": "User logged in successfully.",
+                                "description": "User credentials are valid. A login token is returned to confirm the PIN sent to the user's email.",
                                 "content": {
                                     "application/json": {
                                         "schema": {
@@ -797,18 +720,14 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "You are logged in."
+                                                    "example": "Your credentials have been confirmed. Next, enter the numeric code we sent to your email."
                                                 },
                                                 "data": {
                                                     "type": "object",
                                                     "properties": {
-                                                        "access": {
+                                                        "userLoginToken": {
                                                             "type": "string",
-                                                            "example": "ACCESS_TOKEN_STRING"
-                                                        },
-                                                        "refresh": {
-                                                            "type": "string",
-                                                            "example": "REFRESH_TOKEN_STRING"
+                                                            "example": "Cg2eCx5HUg5zeS--h9zFaJlHSOv_eejo4hSqQEIbwu8DRD27CWsmVIhu471uHr-6-Ix7q9A6hFz0jsb0rybc_hQKJrBgFSkcmeTv"
                                                         }
                                                     }
                                                 },
@@ -817,13 +736,37 @@ public class DocumentationJson {
                                                     "properties": {
                                                         "self": {
                                                             "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/login"
+                                                            "example": "/api/v1/accounts/login"
                                                         },
                                                         "next": {
                                                             "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/get-profile"
+                                                            "example": "/api/v1/accounts/login-confirmation"
                                                         }
                                                     }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "401": {
+                                "description": "Invalid credentials provided.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 401
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Invalid credentials."
                                                 }
                                             }
                                         }
@@ -853,9 +796,125 @@ public class DocumentationJson {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                },
+                """
+            )
+
+            .append(
+                """
+                "/ACCOUNTS_BASE_URL_REPLACE/login-confirmation": {
+                    "post": {
+                        "summary": "Confirm user login with PIN",
+                        "description": "This endpoint completes the login process by verifying the `userLoginToken` and the numeric PIN sent to the user's email. If both are valid and the account exists, access and refresh tokens are generated and returned. Invalid tokens or PINs, or non-existent users, will result in appropriate error responses.",
+                        "tags": [
+                            "ACCOUNTS"
+                        ],
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "userLoginToken": {
+                                                "type": "string",
+                                                "description": "The temporary login token generated after validating user credentials in the initial login step.",
+                                                "example": "Cg2eCx5HUg5zeS--h9zFaJlHSOv_eejo4hSqQEIbwu8DRD27CWsmVIhu471uHr-6-Ix7q9A6hFz0jsb0rybc_hQKJrBgFSkcmeTv"
+                                            },
+                                            "pin": {
+                                                "type": "string",
+                                                "description": "The numeric PIN sent to the user's email during the login process.",
+                                                "example": "123456"
+                                            }
+                                        },
+                                        "required": [
+                                            "userLoginToken",
+                                            "pin"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "User login confirmed successfully. Access and refresh tokens are returned.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 200
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "success"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Welcome! You are logged in."
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "access": {
+                                                            "type": "string",
+                                                            "example": "M6sE0Snd3mO8ho1yToAcxeszZL0MS_pFbjfgzw-HMtFcAfzl1s20KAjm0j0p2OQFvQalPcD-8CxuEK2J17I6ABigcApt9IEF7lqvn7mYANJj-ZIGMXARch5qAmsWXq5Y6uGIai0AX1ekhgvIv2wa_k8qauhDKHpUjBAytAHDkiAhrjjVX_S1o8tNbpNg5p7Rj5RS2RqkqBB3RDubS_gFM1GQOz-IOBL-Zt0-OxbWmL2wVeTn7it885iGznKrI5GM8vnAsABWYcwUa05lRlTQqdWrxp0wlaSLbbcTPBQYkZ3AdiMPIYzdLsewQsvY1kZ8Xu36HO_IZzWSHrZoo5yvNdcrUZ2z6lc_GrvFAQhlUKdyTs-ztBrbZT_lxhYNnZa8CCvA_lY5Pv5dQ7l4YXoVJgDk-Lz2ZwW3oYrSb_Il7h_-GlXcaRQb27XNh795FODT7xgXofNYs26j-PpNPD5GMw9eKyMdz-EpOjrXXV0YVlbiqyzLv6t87HJPLka629Vs2Z6mHh00ULzeHsQ5tas7LP1Sn4qVdkN5uCqDYlcdXt590N5-_oQMRgxEuZHPftTUv9TyLcMJzG5Rumvr3NAUXx0R9UFNW9vs_URnGZnjhnR4APdr5wa2SFTXLH5cxf3apSCLIouBE3YAW_97WjclXSpIBSKZ25yb8TfkjBL4BhnZkA_2GSkvuJyxtduhPs7QkJ1MEvRg3qUa7L1opDOpVNFWN-vQ7ZuJJTy_zLlL9hOKcYB_62pB-yNDsmm1Yvbp68lqAufT865L66gdpEOA9VzOTUDfSlkoX1piu3WQKsoHtNB0Ow348mZcy3m7avWKTEDr94fceMfh_xXwIwF9AHZtkrE9DVriM-3QwKFfLyu_cgA8pgLGOnaydTDC4onUd3RSupQSeW5ivNLDV7an_dsWNu8Cju_cf4Ttgq0HvDPmvq7Mm3wgSR3guRu1z2F2vypgK_duQB5uhA5YfMotcMyAEGqXRMd2rJFf0f36RXy2Gi28QWOdJnhGk4t-jjku99HFaqMaM4HeUyEA5j3FAr89fPxZkwYyCO43h6rIlpme3ORiz7IviODBb6e89vzsQhsv_7z38AFDn23Xwzzlp4HQBpjPKo0nZq8n28yPCfg_ZpSOYK0U1CzwBw8VQhOOkuR9cKKM7LkoL6Xo3A6ADiyklz9ryA9-egFYE8LJUbsZyDmo"
+                                                        },
+                                                        "refresh": {
+                                                            "type": "string",
+                                                            "example": "jhrD34yP92IIb_QkPdJwpsEvG61zNGQL_tXrypiJwd4bKrjHtjo_w6NNWBTBTbZei_Ki3ue4fInoNMKFu_dDCg3ylov9CdvnArphX6Kv_heXq1UBfk-61Nux1_I_0hF2Bft6viaLoj12XdBLUrUSiIwa2LCJcOj8b6ISp7mLTQw"
+                                                        }
+                                                    }
+                                                },
+                                                "links": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "self": {
+                                                            "type": "string",
+                                                            "example": "/api/v1/accounts/login-confirmation"
+                                                        },
+                                                        "next": {
+                                                            "type": "string",
+                                                            "example": "/api/v1/accounts/get-profile"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "401": {
+                                "description": "Invalid login token or credentials.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 401
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Invalid credentials."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             "404": {
-                                "description": "User not found or credentials are incorrect.",
+                                "description": "Invalid or expired PIN.",
                                 "content": {
                                     "application/json": {
                                         "schema": {
@@ -871,7 +930,7 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Invalid credentials."
+                                                    "example": "The entered PIN is invalid or has expired. Please try again."
                                                 }
                                             }
                                         }
