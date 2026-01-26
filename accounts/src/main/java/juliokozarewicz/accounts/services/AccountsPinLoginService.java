@@ -90,8 +90,8 @@ public class AccountsPinLoginService {
 
         // Links
         Map<String, String> customLinks = new LinkedHashMap<>();
-        customLinks.put("self", "/" + accountsBaseURL + "/update-email-link");
-        customLinks.put("next", "/" + accountsBaseURL + "/update-email");
+        customLinks.put("self", "/" + accountsBaseURL + "/login-pin");
+        customLinks.put("next", "/" + accountsBaseURL + "/login");
 
         StandardResponseService response = new StandardResponseService.Builder()
             .statusCode(200)
