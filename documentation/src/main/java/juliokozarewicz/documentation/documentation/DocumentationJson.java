@@ -59,8 +59,8 @@ public class DocumentationJson {
             http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE
             ```
             
-            In addition to direct access to the official documentation, 
-            you can explore the API in another way using two popular interfaces:
+            In addition to direct access to the official documentation, you can 
+            explore the API in another way by using a different interface.
             
             ### Swagger:
             Swagger offers a user-friendly, interactive interface where you 
@@ -69,15 +69,6 @@ public class DocumentationJson {
             Access it here:
             ```
             http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/swagger
-            ```
-            
-            ### Redocly:
-            Redocly provides a clean, well-structured view of the API 
-            documentation, making it easier to read and navigate through 
-            endpoints, schemas, and examples.
-            Access it here:
-            ```
-            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/redocly
             ```
             
             
@@ -92,16 +83,16 @@ public class DocumentationJson {
             
             ## User Login and Access Token Renewal Process
             The login process is carried out in two steps. First, the user sends 
-            their email and password to the endpoint "/api/v1/accounts/login". 
+            their email and password to the endpoint `/api/v1/accounts/login`. 
             If the credentials are valid and the account is active, a temporary 
-            "userLoginToken" is generated and returned in the response, along with 
+            `userLoginToken` is generated and returned in the response, along with 
             a numeric PIN, which is sent to the user's email. Next, the user 
             sends the "userLoginToken" and the PIN received to the endpoint 
-            "/api/v1/accounts/login-confirmation". If both are valid, the system 
+            `/api/v1/accounts/login-confirmation`. If both are valid, the system 
             returns an access token and a refresh token, which can be used to access 
             protected resources in the application. If any of the tokens or the 
             PIN are invalid, an appropriate error will be returned.
-
+            
             
 
             ## Common responses from services
@@ -141,7 +132,22 @@ public class DocumentationJson {
                 "message": "The request has an error, check."
             }
             ```
+            
+            **Server error (500):**
+            The error occurs only on the requested endpoint. The service is 
+            online, but this specific endpoint is returning an error. In contrast, 
+            the API Gateway error represents a general service-level error. 
+            Another difference is that this endpoint error includes the message 
+            field, which allows for message translation. The response will be:
 
+            ```json
+            {
+                "statusCode": 500,
+                "statusMessage": "error",
+                "message": "An unexpected error occurred, please try again later."
+            }
+            ```
+            
             
             
             ## API Gateway Errors (No translation support)

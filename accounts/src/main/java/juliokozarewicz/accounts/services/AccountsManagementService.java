@@ -183,7 +183,17 @@ public class AccountsManagementService implements AccountsManagementInterface {
                     "    </tr>" +
                     "</table>"
 
-                : link + "<br>"
+                :
+
+                "<span style=\"" +
+                    "font-size:28px; " +
+                    "line-height:1.5; " +
+                    "display:inline-block; " +
+                    "margin-top:4px;\"" +
+                ">"
+                    + link +
+                "</span>" +
+                "<br>"
 
             ).append("</b><br><br>");
 

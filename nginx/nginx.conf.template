@@ -221,11 +221,6 @@ http {
             limit_req zone=general_zone burst=5 nodelay;
         }
 
-        # [ DOCUMENTATION - Redocly ]
-        location /${DOCUMENTATION_BASE_URL}/redocly {
-            proxy_pass http://documentation_backend;
-            limit_req zone=general_zone burst=5 nodelay;
-        }
         # ------------------------------------------------------- (end documentation)
 
         # -------------------------------------------------------- (init hello world)

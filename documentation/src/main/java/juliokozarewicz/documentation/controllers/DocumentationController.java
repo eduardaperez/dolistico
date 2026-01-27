@@ -123,37 +123,4 @@ class DocumentationController {
             "</html>";
     }
 
-    @GetMapping("/${DOCUMENTATION_BASE_URL}/redocly")
-    public String getRedocUi() {
-        return "<html>\n" +
-            "<head>\n" +
-            "<title>" + applicationTitle.toUpperCase() + "</title>\n" +
-            "<link rel='icon' type='image/x-icon' href='" + "http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/static/public/favicon.ico' />\n" +
-            "<script src='https://cdn.jsdelivr.net/npm/redoc@2.1.4/bundles/redoc.standalone.js'></script>\n" +
-            "<style>\n" +
-            "  #redoc-container {\n" +
-            "    max-width: 100%;\n" +
-            "    margin: 0 auto;\n" +
-            "  }\n" +
-            "  .redoc-wrap a[href=\"https://redocly.com/redoc/\"] {\n" +
-            "    display: none !important;\n" +
-            "  }\n" +
-            "</style>\n" +
-            "</head>\n" +
-            "<body>\n" +
-            "<div id='redoc-container'></div>\n" +
-            "<script>\n" +
-            "  Redoc.init('http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/json', {\n" +
-            "    theme: {\n" +
-            "      typography: {\n" +
-            "        fontSize: '12px', \n" +
-            "        codeFontSize: '7px' \n" +
-            "      }\n" +
-            "    }\n" +
-            "  }, document.getElementById('redoc-container'));\n" +
-            "</script>\n" +
-            "</body>\n" +
-            "</html>";
-    }
-
 }
