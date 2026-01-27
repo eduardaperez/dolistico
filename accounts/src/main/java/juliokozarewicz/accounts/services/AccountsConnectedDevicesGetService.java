@@ -150,6 +150,7 @@ public class AccountsConnectedDevicesGetService {
 
         } catch (Exception e) {
 
+            // #####
             System.out.println(e);
 
             // call custom error
