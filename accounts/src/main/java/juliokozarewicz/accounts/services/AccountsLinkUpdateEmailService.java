@@ -13,7 +13,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+import java.net.HttpURLConnection;
 
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.*;
 
@@ -68,65 +70,113 @@ public class AccountsLinkUpdateEmailService {
         // language
         Locale locale = LocaleContextHolder.getLocale();
 
-        // Verify and authorize URL
-        // ---------------------------------------------------------------------
+        ////////////////////////////////////// ( Verify and authorize URL INIT )
         boolean isAllowedURL = false;
 
         try {
 
             String linkRaw = accountsLinkUpdateEmailDTO.link().trim();
 
+            // Ensure scheme exists (default to HTTPS)
             if (!linkRaw.startsWith("http://") && !linkRaw.startsWith("https://")) {
-                linkRaw = "http://" + linkRaw;
+                linkRaw = "https://" + linkRaw;
             }
 
             URI linkUri = new URI(linkRaw);
 
-            String linkHost = linkUri.getHost();
+            // Enforce HTTPS only
+            if (!"https".equalsIgnoreCase(linkUri.getScheme())) {
+                isAllowedURL = false;
+            } else if (linkUri.getFragment() != null) {
+                // Reject fragments (#)
+                isAllowedURL = false;
+            } else {
 
-            linkHost = linkHost.toLowerCase().replaceFirst("^www\\.", "");
+                String linkHost = linkUri.getHost();
 
-            String[] allowedOrigins = publicDomain.split(",");
+                if (linkHost == null) {
+                    isAllowedURL = false;
+                } else {
 
-            for (String origin : allowedOrigins) {
+                    linkHost = linkHost.toLowerCase();
 
-                String originTrimmed = origin.trim();
+                    // Block common redirect-related query parameters
+                    String query = linkUri.getQuery();
+                    if (query != null) {
+                        String q = query.toLowerCase();
+                        if (
+                            q.contains("redirect=") ||
+                                q.contains("next=") ||
+                                q.contains("url=") ||
+                                q.contains("return=") ||
+                                q.contains("continue=") ||
+                                q.contains("target=")
+                        ) {
+                            isAllowedURL = false;
+                        }
+                    }
 
-                if (!originTrimmed.startsWith("http://") && !originTrimmed.startsWith("https://")) {
-                    originTrimmed = "http://" + originTrimmed;
-                }
+                    // Validate against allowed domains (exact match only)
+                    String[] allowedOrigins = publicDomain.split(",");
 
-                URI originUri = new URI(originTrimmed);
-                String originHost = originUri.getHost();
-                if (originHost != null) {
-                    originHost = originHost.toLowerCase().replaceFirst("^www\\.", "");
-                    if (linkHost.equals(originHost)) {
-                        isAllowedURL = true;
-                        break;
+                    for (String origin : allowedOrigins) {
+
+                        String originTrimmed = origin.trim();
+
+                        if (!originTrimmed.startsWith("http://") && !originTrimmed.startsWith("https://")) {
+                            originTrimmed = "https://" + originTrimmed;
+                        }
+
+                        URI originUri = new URI(originTrimmed);
+                        String originHost = originUri.getHost();
+
+                        if (originHost != null &&
+                            linkHost.equalsIgnoreCase(originHost)) {
+
+                            isAllowedURL = true;
+                            break;
+                        }
+                    }
+
+                    // Optional: detect real HTTP redirects (3xx)
+                    if (isAllowedURL) {
+                        try {
+                            HttpURLConnection connection =
+                                (HttpURLConnection) linkUri.toURL().openConnection();
+
+                            connection.setInstanceFollowRedirects(false);
+                            connection.setRequestMethod("HEAD");
+                            connection.setConnectTimeout(3000);
+                            connection.setReadTimeout(3000);
+
+                            int status = connection.getResponseCode();
+                            if (status >= 300 && status < 400) {
+                                isAllowedURL = false;
+                            }
+                        } catch (Exception ignored) {
+                            // Any access error invalidates the URL
+                            isAllowedURL = false;
+                        }
                     }
                 }
             }
 
-        } catch (Exception e) {
-
-            throw new InternalError( "It was not possible to validate the " +
-                "provided URL and compare it with the authorized URLs: " +
-                "[AccountsLinkUpdateEmailService.execute()]: " + e );
-
+        } catch (Exception ignored) {
+            // Any parsing or unexpected error invalidates the URL
+            isAllowedURL = false;
         }
 
         if (!isAllowedURL) {
 
-            // call custom error
+            // Single and consistent error response
             errorHandler.customErrorThrow(
                 403,
                 messageSource.getMessage(
                     "validation_valid_link", null, locale
                 )
             );
-
         }
-        // ---------------------------------------------------------------------
+        /////////////////////////////////////// ( Verify and authorize URL END )
 
         // Credentials
         UUID idUser = UUID.fromString((String) credentialsData.get("id"));
