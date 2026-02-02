@@ -14,7 +14,7 @@ services:
     networks:
       - spring_net
     volumes:
-      - accounts_avatar_uploads:/static/uploads/avatar:ro
+      - accounts_static_files:/static/public:ro
     healthcheck:
       test: [ "CMD", "curl", "-f", "-A", "Docker-Healthcheck", "http://nginx/nginx-status" ]
       interval: 30s
@@ -169,7 +169,7 @@ services:
     networks:
       - spring_net
     volumes:
-      - accounts_avatar_uploads:/app/src/main/resources/static/uploads/avatar
+      - accounts_static_files:/app/src/main/resources/static/public
     depends_on:
       database:
         condition: service_healthy
@@ -221,7 +221,7 @@ volumes:
   database_data:
   cachemanager_data:
   streamingmanager_data:
-  accounts_avatar_uploads:
+  accounts_static_files:
 
 networks:
   spring_net:

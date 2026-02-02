@@ -34,7 +34,7 @@ public class AccountsAvatarCreateService {
     private final ErrorHandler errorHandler;
     private final AccountsProfileRepository accountsProfileRepository;
     private final Path uploadDir;
-    private static final String DEFAULT_UPLOAD_DIR = "src/main/resources/static/uploads/avatar";
+    private static final String DEFAULT_UPLOAD_DIR = "src/main/resources/static/public/uploads/avatar";
     private final AccountsManagementService accountsManagementService;
 
     public AccountsAvatarCreateService(

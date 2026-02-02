@@ -1,38 +1,41 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
 }
 
-/* container */
 #loading {
-  width: 10%;
-  height: 10%;
+    width: 10%;
+    height: 10%;
 }
 
-/* spinner */
+#response {
+    display: none;
+}
+
 .spinner {
-  width: 100%;
-  height: 100%;
-  background-image: url("../assets/spin-loading.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  animation: spin 1.5s linear infinite;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/spin-loading.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    animation: spin 1.5s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
