@@ -115,6 +115,7 @@ public class DocumentationJson {
             {
                 "statusCode": 422,
                 "statusMessage": "error",
+                "message": "The request contains empty or incorrect fields.",
                 "fieldErrors": [
                     { "field": "field name", "message": "This field is required." },
                     { "field": "field name", "message": "This field is required." }
@@ -293,7 +294,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/signup": {
                     "post": {
                         "summary": "Create a new user account",
-                        "description": "Creates a new user account with the provided details such as name, email, password, and link. An activation email is sent after account creation.",
+                        "description": "Creates a new user account with the provided details such as name, email and password. An activation email is sent after account creation.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -318,18 +319,12 @@ public class DocumentationJson {
                                                 "type": "string",
                                                 "description": "The password for the new account. Must contain at least one uppercase letter, one number, and one special character.",
                                                 "example": "Teste1234!"
-                                            },
-                                            "link": {
-                                                "type": "string",
-                                                "description": "A valid URL that will be included in the activation email.",
-                                                "example": "http://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
                                             }
                                         },
                                         "required": [
                                             "name",
                                             "email",
-                                            "password",
-                                            "link"
+                                            "password"
                                         ]
                                     }
                                 }
