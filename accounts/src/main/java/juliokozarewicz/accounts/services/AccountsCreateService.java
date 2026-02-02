@@ -39,6 +39,9 @@ public class AccountsCreateService {
 
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+
+    @Value("${VALIDATE_ACCOUNT_LINK}")
+    private String ValidateAccountEndpoint;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
@@ -89,22 +92,6 @@ public class AccountsCreateService {
         String encryptedEmail = encryptionService.encrypt(
             accountsCreateDTO.email().toLowerCase()
         );
-
-        ////////////////////////////////////// ( Verify and authorize URL INIT )
-        boolean isAllowedURL = accountsManagementService.isAllowedUrl(
-            accountsCreateDTO.link(),
-            publicDomain
-        );
-
-        if (!isAllowedURL) {
-            errorHandler.customErrorThrow(
-                403,
-                messageSource.getMessage(
-                    "validation_valid_link", null, locale
-                )
-            );
-        }
-        /////////////////////////////////////// ( Verify and authorize URL END )
 
         // find user
         Optional<AccountsEntity> findUser =  accountsRepository.findByEmail(
@@ -171,7 +158,7 @@ public class AccountsCreateService {
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(accountsCreateDTO.link())
+                .fromHttpUrl("http://" + publicDomain.split(",")[0] + "/" + accountsBaseURL + "/" + ValidateAccountEndpoint)
                 .queryParam("email", encryptedEmail)
                 .queryParam("token", tokenGenerated)
                 .build()
@@ -213,7 +200,7 @@ public class AccountsCreateService {
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(accountsCreateDTO.link())
+                .fromHttpUrl("http://" + publicDomain.split(",")[0] + "/" + accountsBaseURL + "/" + ValidateAccountEndpoint)
                 .queryParam("email", encryptedEmail)
                 .queryParam("token", tokenGenerated)
                 .build()

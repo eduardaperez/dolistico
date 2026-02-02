@@ -1,7 +1,7 @@
 package juliokozarewicz.documentation.exceptions;
 
-import juliokozarewicz.documentation.services.StandardResponseService;
 import jakarta.validation.ConstraintViolationException;
+import juliokozarewicz.documentation.services.StandardResponseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -83,6 +83,12 @@ public class ErrorHandler {
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("statusCode", 422);
             response.put("statusMessage", "error");
+            response.put(
+                "message",
+                messageSource.getMessage(
+                    "response_fields_error", null, locale
+                )
+            );
             response.put("fieldErrors", errors);
 
             return ResponseEntity

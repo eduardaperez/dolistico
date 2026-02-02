@@ -83,6 +83,12 @@ public class ErrorHandler {
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("statusCode", 422);
             response.put("statusMessage", "error");
+            response.put(
+                "message",
+                messageSource.getMessage(
+                    "response_fields_error", null, locale
+                )
+            );
             response.put("fieldErrors", errors);
 
             return ResponseEntity
@@ -95,8 +101,8 @@ public class ErrorHandler {
         if (
 
             error instanceof HttpMessageNotReadableException ||
-            error instanceof HttpRequestMethodNotSupportedException ||
-            error instanceof NoResourceFoundException
+                error instanceof HttpRequestMethodNotSupportedException ||
+                error instanceof NoResourceFoundException
 
         ) {
 

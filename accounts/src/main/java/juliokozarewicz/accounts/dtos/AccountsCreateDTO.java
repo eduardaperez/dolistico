@@ -33,13 +33,6 @@ public record AccountsCreateDTO(
         regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$",
         message = "{validation_must_uppercase_letter}"
     )
-    String password,
-
-    @NotEmpty(message = "{validation_is_required}")
-    @Pattern(
-        regexp = "^(https?|ftp)://[^ /$.?#].[^ ]*$",
-        message = "{validation_valid_link}"
-    )
-    String link
+    String password
 
 ) {}

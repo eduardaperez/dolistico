@@ -83,6 +83,12 @@ public class ErrorHandler {
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("statusCode", 422);
             response.put("statusMessage", "error");
+            response.put(
+                "message",
+                messageSource.getMessage(
+                    "response_fields_error", null, locale
+                )
+            );
             response.put("fieldErrors", errors);
 
             return ResponseEntity
