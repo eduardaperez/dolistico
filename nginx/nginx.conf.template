@@ -258,7 +258,7 @@ http {
             index index.html;
             try_files $uri /index.html;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=5 nodelay;
+            limit_req zone=general_zone burst=30 nodelay;
         }
 
         # [ ACCOUNTS - Update Password Validation ]
@@ -279,7 +279,7 @@ http {
             index index.html;
             try_files $uri /index.html;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=5 nodelay;
+            limit_req zone=general_zone burst=30 nodelay;
         }
 
         # [ ACCOUNTS - Login ]
@@ -310,7 +310,7 @@ http {
         location /${ACCOUNTS_BASE_URL}/static/uploads/avatar/ {
             alias /static/public/uploads/avatar/;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=5 nodelay;
+            limit_req zone=general_zone burst=30 nodelay;
         }
 
         # [ ACCOUNTS - Upload Avatar ]
