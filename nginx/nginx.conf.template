@@ -273,6 +273,15 @@ http {
             limit_req zone=general_zone burst=5 nodelay;
         }
 
+        # [ ACCOUNTS - Update Password *** STATIC *** ]
+        location /${ACCOUNTS_BASE_URL}/static/update-password/ {
+            alias /static/public/update-password/;
+            index index.html;
+            try_files $uri /index.html;
+            add_header Cache-Control "public";
+            limit_req zone=general_zone burst=5 nodelay;
+        }
+
         # [ ACCOUNTS - Login ]
         location /${ACCOUNTS_BASE_URL}/login {
             proxy_pass http://accounts_backend;
