@@ -15,23 +15,34 @@
 
             <form id="updatePasswordForm" method="post">
 
-                <div id="resetIcon"></div>
+                <div id="userIcon">
+                    <div id="userIconHead"></div>
+                    <div id="userIconBody"></div>
+                </div>
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="*************"
-                    required
-                />
+                <div id="passwordBox">
+                    <div id="passIcon"></div>
 
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="*************"
-                    required
-                />
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="*************"
+                        required
+                    />
+                </div>
+
+                <div id="passwordBox">
+                    <div id="passAgainIcon"></div>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="*************"
+                        required
+                    />
+                </div>
 
                 <button id="sendButtom">ok</button>
 
