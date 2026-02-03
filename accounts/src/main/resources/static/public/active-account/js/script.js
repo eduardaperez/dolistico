@@ -27,33 +27,23 @@ window.addEventListener("load", () => {
 
         const data = await response.json();
 
-        console.log(data);
-
         setTimeout(() => {
 
             loading.style.display = "none";
             responseEl.style.display = "block";
-
-            // Text response
-            responseEl.textContent = data.message;
-            responseEl.style.color = "#ffffff";
-            responseEl.style.fontSize = "2.8vh";
-            responseEl.style.lineHeight = "1.5";
-            responseEl.style.width = "90%";
-            responseEl.style.maxWidth = "650px";
-            responseEl.style.margin = "0 auto";
-            responseEl.style.textAlign = "center";
-            responseEl.style.fontFamily = "Arial, sans-serif";
-            responseEl.style.textTransform = "uppercase";
-            responseEl.style.padding = "50px 50px";
+            responseEl.textContent = (data.message ? data.message : data.detail);
 
             if (response.ok) {
-                body.style.backgroundColor = "#9DE872";
+
+                body.classList.add("success-background");
+
             } else {
-                body.style.backgroundColor = "#F44336";
+
+                body.classList.add("error-background");
+
             }
 
-        }, 1000);
+        }, 1000 );
 
     });
 
