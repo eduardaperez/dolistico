@@ -99,7 +99,6 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
             
         }
 
-
     })
 
     .catch(error => {

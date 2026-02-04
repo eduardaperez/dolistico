@@ -1,12 +1,12 @@
 package juliokozarewicz.accounts.services;
 
+import jakarta.transaction.Transactional;
 import juliokozarewicz.accounts.dtos.AccountsLinkUpdatePasswordDTO;
 import juliokozarewicz.accounts.enums.AccountsUpdateEnum;
 import juliokozarewicz.accounts.enums.EmailResponsesEnum;
 import juliokozarewicz.accounts.exceptions.ErrorHandler;
 import juliokozarewicz.accounts.persistence.entities.AccountsEntity;
 import juliokozarewicz.accounts.persistence.repositories.AccountsRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +31,9 @@ public class AccountsLinkUpdatePasswordService {
 
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+
+    @Value("${UPDATE_EMAIL_LINK}")
+    private String updateEmailLink;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
@@ -71,22 +72,6 @@ public class AccountsLinkUpdatePasswordService {
         // language
         Locale locale = LocaleContextHolder.getLocale();
 
-        ////////////////////////////////////// ( Verify and authorize URL INIT )
-        boolean isAllowedURL = accountsManagementService.isAllowedUrl(
-            accountsLinkUpdatePasswordDTO.link(),
-            publicDomain
-        );
-
-        if (!isAllowedURL) {
-            errorHandler.customErrorThrow(
-                403,
-                messageSource.getMessage(
-                    "validation_valid_link", null, locale
-                )
-            );
-        }
-        /////////////////////////////////////// ( Verify and authorize URL END )
-
         // find user
         Optional<AccountsEntity> findUser =  accountsRepository.findByEmail(
             accountsLinkUpdatePasswordDTO.email().toLowerCase()
@@ -118,7 +103,7 @@ public class AccountsLinkUpdatePasswordService {
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(accountsLinkUpdatePasswordDTO.link())
+                .fromHttpUrl(updateEmailLink)
                 .queryParam("email", encryptedEmail)
                 .queryParam("token", tokenGenerated)
                 .build()

@@ -41,7 +41,7 @@ public class AccountsCreateService {
     private String publicDomain;
 
     @Value("${VALIDATE_ACCOUNT_LINK}")
-    private String ValidateAccounLink;
+    private String validateAccountLink;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
@@ -158,7 +158,7 @@ public class AccountsCreateService {
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(ValidateAccounLink)
+                .fromHttpUrl(validateAccountLink)
                 .queryParam("email", encryptedEmail)
                 .queryParam("token", tokenGenerated)
                 .build()
@@ -200,7 +200,7 @@ public class AccountsCreateService {
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(ValidateAccounLink)
+                .fromHttpUrl(validateAccountLink)
                 .queryParam("email", encryptedEmail)
                 .queryParam("token", tokenGenerated)
                 .build()
