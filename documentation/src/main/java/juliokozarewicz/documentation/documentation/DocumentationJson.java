@@ -484,7 +484,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/update-password-link": {
                     "post": {
                         "summary": "Send password update link to the user",
-                        "description": "Sends an email to the user with a password update link. The email must be valid and the link must be properly formatted.",
+                        "description": "Sends an email to the user with instructions to update their password. The email address must be valid.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -498,17 +498,11 @@ public class DocumentationJson {
                                             "email": {
                                                 "type": "string",
                                                 "description": "The email address of the user requesting the password update.",
-                                                "example": "hgKhGiygkjHGkYgKjgBkyftR676hig868btyb87bghvg76b97yu"
-                                            },
-                                            "link": {
-                                                "type": "string",
-                                                "description": "The URL to which the user will be redirected to update the password.",
-                                                "example": "http://example.com/update-password"
+                                                "example": "email@email.com"
                                             }
                                         },
                                         "required": [
-                                            "email",
-                                            "link"
+                                            "email"
                                         ]
                                     }
                                 }
