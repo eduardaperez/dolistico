@@ -8,6 +8,6 @@ window.addEventListener("load", () => {
         loading.style.display = "none";
         formUpdatepasswordFrame.style.display = "flex";
 
-    }, 1000 );
+    }, 2000 );
 
 });
