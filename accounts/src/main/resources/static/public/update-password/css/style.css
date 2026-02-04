@@ -123,6 +123,16 @@ input#password.passworderror {
     margin-top: 5px;
 }
 
+#sendbtn {
+        height: 100%;
+        width: 100%;
+        background-image: url("../assets/sendbtn.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-size: auto 50%;
+    }
+
 #sendButtom:hover {
     background-color: var(--gray2);
 }
