@@ -23,8 +23,8 @@ body {
 }
 
 #loading {
-    width: 8vh;
-    height: 8vh;
+    width: 7vh;
+    height: 7vh;
 }
 
 .spinner {
@@ -78,6 +78,23 @@ body {
     padding-left: 12px;
     border-radius: 8px;
     border: 2px solid var(--gray3);
+}
+
+input#password.passworderror {
+    width: 100%;
+    height: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    outline: none;
+    background: none;
+    box-shadow: none;
+    background-color: white;
+    color: black;
+    padding-left: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--darkred);
 }
 
 #password:focus {
@@ -160,6 +177,56 @@ body {
     bottom: -40px;
 }
 
+#errorFrame {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.errorText {
+    font-size: 12px;
+    text-align: left;
+    text-transform: lowercase;
+    color: var(--darkred);
+    padding: 5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray3);
+    font-family: Helvetica, Arial, sans-serif;
+    text-transform: lowercase;
+    font-weight: bold;
+}
+
+.errorText::first-letter {
+    text-transform: uppercase;
+}
+
+body.success-background {
+    background-color: var(--green) !important;
+}
+
+#textResponse {
+    display: none;
+    color: var(--black);
+    font-size: 2.8vh;
+    line-height: 1.5;
+    width: 90%;
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    text-transform: lowercase;
+    font-weight: bold;
+    padding: 50px;
+}
+
+#textResponse::first-letter {
+    text-transform: uppercase;
+}
+
+/* >>> MOBILE <<< */
 @media (max-width: 768px) {
     
     
@@ -190,6 +257,23 @@ body {
         border-radius: 8px;
         border: 2px solid var(--gray3);
     }
+
+    #passworderror {
+    width: 100%;
+    height: 50px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    outline: none;
+    background: none;
+    box-shadow: none;
+    background-color: white;
+    color: black;
+    padding-left: 12px;
+    border-radius: 8px;
+    border: 2px solid var(--darkred);
+}
 
     #sendButtom {
         width: 100%;
