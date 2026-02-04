@@ -100,6 +100,21 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
         }
 
 
+    })
+
+    .catch(error => {
+        console.error("Erro no fetch:", error);
+
+        // fallback seguro
+        loading.style.display = "none";
+        formUpdatepasswordFrame.style.display = "flex";
+
+        errorFrame.innerHTML = "";
+        const p = document.createElement("p");
+        p.className = "errorText";
+        p.textContent = "Unable to update the password. Please try again later.";
+        errorFrame.appendChild(p);
+        errorFrame.style.display = "flex";
     });
 
 });
