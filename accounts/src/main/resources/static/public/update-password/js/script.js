@@ -17,22 +17,23 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
     
     event.preventDefault(); // Reload disabled
 
+    // hide form
+    formUpdatepasswordFrame.style.display = "none";
+    loading.style.display = "flex";
+
     // Get elements
     const errorFrame = document.getElementById("errorFrame");
     const passwordField = document.getElementById("password");
     const textResponse = document.getElementById("textResponse");
     const body = document.body;
 
-
     // Read password, email and token
     const params = new URLSearchParams(window.location.search);
     const email = params.get("email");
     const token = params.get("token");
-    const password = document.getElementById("password").value;
 
     // Call the API endpoint
-    // const url = `${window.location.origin}/api/v1/accounts/update-password`;
-    const url = `http://186.206.106.93:3000/api/v1/accounts/update-password`;
+    const url = `${window.location.origin}/api/v1/accounts/update-password`;
 
     fetch(url, {
         method: "PATCH",
@@ -42,7 +43,7 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
         },
         body: JSON.stringify({
             email: email,
-            password: password,
+            password: passwordField.value,
             token: token
         })
     })
@@ -53,15 +54,20 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
 
         if (response.ok) {
 
-            formUpdatepasswordFrame.style.display = "none";
+            loading.style.display = "none";
             body.classList.add("success-background");
             textResponse.textContent = (data.message ? data.message : data.detail);
             textResponse.style.display = "block";
+            passwordField.value = "";
 
         } else {
 
             // Error clean
             errorFrame.innerHTML = "";
+
+            // show form
+            formUpdatepasswordFrame.style.display = "flex";
+            loading.style.display = "none";
 
             // Standard (message or detail)
             const generalMessage =
@@ -95,12 +101,5 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
 
 
     });
-
-
-
-
-
-
-
 
 });
