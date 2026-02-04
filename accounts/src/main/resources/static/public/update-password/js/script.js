@@ -26,6 +26,7 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
     const passwordField = document.getElementById("password");
     const textResponse = document.getElementById("textResponse");
     const body = document.body;
+    const sucessIcon = document.getElementById("successicon");
 
     // Read password, email and token
     const params = new URLSearchParams(window.location.search);
@@ -53,8 +54,9 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
         const data = await response.json();
 
         if (response.ok) {
-
+    
             loading.style.display = "none";
+            sucessIcon.style.display = "block";
             body.classList.add("success-background");
             textResponse.textContent = (data.message ? data.message : data.detail);
             textResponse.style.display = "block";

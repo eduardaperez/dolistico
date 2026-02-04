@@ -191,6 +191,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
                 "<span style=\"" +
                     "font-size:28px; " +
                     "line-height:1.5; " +
+                    "letter-spacing: 3px; " +
                     "display:inline-block; " +
                     "margin-top:4px;\"" +
                 ">"

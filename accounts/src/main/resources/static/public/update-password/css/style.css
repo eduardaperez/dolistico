@@ -236,6 +236,16 @@ body.success-background {
     text-transform: uppercase;
 }
 
+#successicon{
+    display: none;
+    width: 10vh;
+    height: 10vh;
+    background-image: url("../assets/success.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
 /* >>> MOBILE <<< */
 @media (max-width: 768px) {
     

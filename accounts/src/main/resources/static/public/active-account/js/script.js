@@ -1,5 +1,7 @@
 window.addEventListener("load", () => {
     const loading = document.getElementById("loading");
+    const sucessIcon = document.getElementById("successicon");
+    const errorIcon = document.getElementById("erroricon");
     const responseEl = document.getElementById("response");
     const body = document.body;
 
@@ -34,16 +36,30 @@ window.addEventListener("load", () => {
             responseEl.textContent = (data.message ? data.message : data.detail);
 
             if (response.ok) {
-
+                
+                errorIcon.style.display = "none";
+                sucessIcon.style.display = "block";
                 body.classList.add("success-background");
 
             } else {
-
+                errorIcon.style.display = "block";
+                sucessIcon.style.display = "none";
                 body.classList.add("error-background");
 
             }
 
         }, 1000 );
+
+    })
+
+    .catch(error => {
+
+        errorIcon.style.display = "block";
+        sucessIcon.style.display = "none";
+        loading.style.display = "none";
+        responseEl.style.display = "block";
+        responseEl.textContent = "Something went wrong while activating your account. Please try again later.";
+        body.classList.add("error-background");
 
     });
 

@@ -55,6 +55,26 @@ body {
     padding: 50px;
 }
 
+#erroricon{
+    display: none;
+    width: 10vh;
+    height: 10vh;
+    background-image: url("../assets/error.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#successicon{
+    display: none;
+    width: 10vh;
+    height: 10vh;
+    background-image: url("../assets/success.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
 #response::first-letter {
     text-transform: uppercase;
 }
