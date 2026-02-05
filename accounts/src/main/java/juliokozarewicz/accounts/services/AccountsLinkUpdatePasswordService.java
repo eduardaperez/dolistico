@@ -80,6 +80,7 @@ public class AccountsLinkUpdatePasswordService {
             !findUser.get().isBanned()
 
         ) {
+
             // Create token
             String tokenGenerated = accountsManagementService
                 .createVerificationToken(

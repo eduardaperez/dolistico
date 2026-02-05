@@ -243,7 +243,7 @@ http {
         # [ ACCOUNTS - Signup ]
         location /${ACCOUNTS_BASE_URL}/signup {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=1 nodelay;
+            limit_req zone=critical_zone burst=1 nodelay;
         }
 
         # [ ACCOUNTS - Activate Account ]
@@ -258,13 +258,13 @@ http {
             index index.html;
             try_files $uri /index.html;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=30 nodelay;
+            limit_req zone=general_zone burst=50 nodelay;
         }
 
-        # [ ACCOUNTS - Update Password Validation ]
+        # [ ACCOUNTS - Update Password Link ]
         location /${ACCOUNTS_BASE_URL}/update-password-link {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=1 nodelay;
+            limit_req zone=critical_zone burst=1 nodelay;
         }
 
         # [ ACCOUNTS - Update Password ]
@@ -279,13 +279,13 @@ http {
             index index.html;
             try_files $uri /index.html;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=30 nodelay;
+            limit_req zone=general_zone burst=50 nodelay;
         }
 
         # [ ACCOUNTS - Login ]
         location /${ACCOUNTS_BASE_URL}/login {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=3 nodelay;
+            limit_req zone=critical_zone burst=3 nodelay;
         }
 
         # [ ACCOUNTS - Login Confirmation ]
@@ -310,13 +310,13 @@ http {
         location /${ACCOUNTS_BASE_URL}/static/uploads/avatar/ {
             alias /static/public/uploads/avatar/;
             add_header Cache-Control "public";
-            limit_req zone=general_zone burst=30 nodelay;
+            limit_req zone=general_zone burst=5 nodelay;
         }
 
         # [ ACCOUNTS - Upload Avatar ]
         location /${ACCOUNTS_BASE_URL}/upload-avatar {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=5 nodelay;
+            limit_req zone=critical_zone burst=5 nodelay;
         }
 
         # [ ACCOUNTS - Update Profile ]
@@ -346,7 +346,7 @@ http {
         # [ ACCOUNTS - Update Email Link ]
         location /${ACCOUNTS_BASE_URL}/update-email-link {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=1 nodelay;
+            limit_req zone=critical_zone burst=1 nodelay;
         }
 
         # [ ACCOUNTS - Update Email ]
@@ -358,13 +358,13 @@ http {
         # [ ACCOUNTS - Get Connected Devices ]
         location /${ACCOUNTS_BASE_URL}/connected-devices {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=5 nodelay;
+            limit_req zone=critical_zone burst=5 nodelay;
         }
 
         # [ ACCOUNTS - Delete Account Link ]
         location /${ACCOUNTS_BASE_URL}/delete-account-link {
             proxy_pass http://accounts_backend;
-            limit_req zone=general_zone burst=1 nodelay;
+            limit_req zone=critical_zone burst=1 nodelay;
         }
 
         # [ ACCOUNTS - Delete Account ]
