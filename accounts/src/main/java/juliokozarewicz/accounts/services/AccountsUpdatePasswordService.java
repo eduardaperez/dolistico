@@ -85,16 +85,22 @@ public class AccountsUpdatePasswordService {
         // language
         Locale locale = LocaleContextHolder.getLocale();
 
-        // Decrypted email
-        String decryptedEmail = "";
+        // Timestamp
+        Instant nowUtc = ZonedDateTime.now(ZoneOffset.UTC).toInstant();
 
-        try {
+        // find token
+        AccountsCacheVerificationTokenMetaDTO findToken = Optional
+            .ofNullable(verificationCache.get(accountsUpdatePasswordDTO.token()))
+            .map(Cache.ValueWrapper::get)
+            .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
+            .filter(
+                tokenMeta -> tokenMeta
+                    .getReason().equals(AccountsUpdateEnum.UPDATE_PASSWORD)
+            )
+            .orElse(null);
 
-            decryptedEmail = encryptionService.decrypt(
-                accountsUpdatePasswordDTO.email()
-            );
-
-        } catch (Exception e) {
+        // token not exist
+        if ( findToken == null ) {
 
             // call custom error
             errorHandler.customErrorThrow(
@@ -108,32 +114,11 @@ public class AccountsUpdatePasswordService {
 
         // find user
         Optional<AccountsEntity> findUser =  accountsRepository.findByEmail(
-            decryptedEmail
+            findToken.getEmail()
         );
 
-        // Timestamp
-        Instant nowUtc = ZonedDateTime.now(ZoneOffset.UTC).toInstant();
-
-        // find email and token
-        AccountsCacheVerificationTokenMetaDTO findEmailAndToken = null;
-        if (findUser.isPresent()) {
-            findEmailAndToken = Optional
-                .ofNullable(verificationCache.get(findUser.get().getId()))
-                .map(Cache.ValueWrapper::get)
-                .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
-                .filter(
-                    tokenMeta -> accountsUpdatePasswordDTO
-                        .token().equals(tokenMeta.getVerificationToken())
-                )
-                .filter(
-                    tokenMeta -> tokenMeta
-                        .getReason().equals(AccountsUpdateEnum.UPDATE_PASSWORD)
-                )
-                .orElse(null);
-        }
-
-        // email & token or account not exist
-        if ( findEmailAndToken == null || findUser.isEmpty() ) {
+        // account not exist
+        if ( findUser.isEmpty() ) {
 
             // call custom error
             errorHandler.customErrorThrow(
@@ -146,13 +131,7 @@ public class AccountsUpdatePasswordService {
         }
 
         // Update password
-        if (
-
-            findEmailAndToken != null &&
-            findUser.isPresent() &&
-            !findUser.get().isBanned()
-
-        ) {
+        if ( !findUser.get().isBanned() ) {
 
             // Password hash
             String passwordHashed = encryptionService.hashPassword(
@@ -187,10 +166,8 @@ public class AccountsUpdatePasswordService {
 
         }
 
-        // Delete all old tokens
-        accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
-            findUser.get().getId()
-        );
+        // Delete current token
+        verificationCache.evict(accountsUpdatePasswordDTO.token());
 
         // Revoke all refresh tokens
         accountsManagementService.deleteAllRefreshTokensByIdNewTransaction(

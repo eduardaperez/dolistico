@@ -68,7 +68,6 @@ public class AccountsDeleteService {
 
         String userIp,
         String userAgent,
-        Map<String, Object> credentialsData,
         AccountsDeleteDTO accountsDeleteDTO
 
     ) {
@@ -76,50 +75,27 @@ public class AccountsDeleteService {
         // language
         Locale locale = LocaleContextHolder.getLocale();
 
-        // Credentials
-        UUID idUser = UUID.fromString((String) credentialsData.get("id"));
-
         // process to delete account
         // ---------------------------------------------------------------------
 
+        // find token
+        AccountsCacheVerificationTokenMetaDTO findToken = Optional
+            .ofNullable(verificationCache.get(accountsDeleteDTO.token()))
+            .map(Cache.ValueWrapper::get)
+            .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
+            .filter(
+                tokenMeta -> tokenMeta
+                    .getReason().equals(AccountsUpdateEnum.DELETE_ACCOUNT)
+            )
+            .orElse(null);
+
         // find user
-        Optional<AccountsEntity> findUser =  accountsRepository.findById(
-            idUser
+        Optional<AccountsEntity> findUser =  accountsRepository.findByEmail(
+            findToken.getEmail()
         );
 
         // User not exist
         if ( findUser.isEmpty() ) {
-
-            // call custom error
-            errorHandler.customErrorThrow(
-                404,
-                messageSource.getMessage(
-                    "response_delete_account_error", null, locale
-                )
-            );
-
-        }
-
-        // find email and token
-        AccountsCacheVerificationTokenMetaDTO findEmailAndToken = null;
-        if (findUser.isPresent()) {
-            findEmailAndToken = Optional
-                .ofNullable(verificationCache.get(findUser.get().getId().toString()))
-                .map(Cache.ValueWrapper::get)
-                .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
-                .filter(
-                    tokenMeta -> accountsDeleteDTO
-                        .token().equals(tokenMeta.getVerificationToken())
-                )
-                .filter(
-                    tokenMeta -> tokenMeta
-                        .getReason().equals(AccountsUpdateEnum.DELETE_ACCOUNT)
-                )
-                .orElse(null);
-        }
-
-        // email & token or account not exist
-        if ( findEmailAndToken == null ) {
 
             // call custom error
             errorHandler.customErrorThrow(
@@ -159,11 +135,6 @@ public class AccountsDeleteService {
             findUser.get().getId()
         );
 
-        // Delete all verification tokens
-        accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
-            findUser.get().getId()
-        );
-
         // Clean expired refresh tokens
         accountsManagementService.deleteExpiredRefreshTokensListById(
             findUser.get().getId()
@@ -175,6 +146,9 @@ public class AccountsDeleteService {
             EmailResponsesEnum.ACCOUNT_DELETED_TIME,
             null
         );
+
+        // Revoke current token
+        verificationCache.evict(accountsDeleteDTO.token());
 
         // ---------------------------------------------------------------------
 

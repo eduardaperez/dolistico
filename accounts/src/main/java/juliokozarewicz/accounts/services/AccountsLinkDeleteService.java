@@ -1,6 +1,5 @@
 package juliokozarewicz.accounts.services;
 
-import juliokozarewicz.accounts.dtos.AccountsLinkDeleteDTO;
 import juliokozarewicz.accounts.enums.AccountsUpdateEnum;
 import juliokozarewicz.accounts.enums.EmailResponsesEnum;
 import juliokozarewicz.accounts.exceptions.ErrorHandler;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +30,9 @@ public class AccountsLinkDeleteService {
 
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+
+    @Value("${DELETE_ACCOUNT_LINK}")
+    private String deleteAccountLink;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
@@ -64,29 +64,12 @@ public class AccountsLinkDeleteService {
     @Transactional
     public ResponseEntity execute(
 
-        Map<String, Object> credentialsData,
-        AccountsLinkDeleteDTO accountsLinkDeleteDTO
+        Map<String, Object> credentialsData
 
     ) {
 
         // language
         Locale locale = LocaleContextHolder.getLocale();
-
-        ////////////////////////////////////// ( Verify and authorize URL INIT )
-        boolean isAllowedURL = accountsManagementService.isAllowedUrl(
-            accountsLinkDeleteDTO.link(),
-            publicDomain
-        );
-
-        if (!isAllowedURL) {
-            errorHandler.customErrorThrow(
-                403,
-                messageSource.getMessage(
-                    "validation_valid_link", null, locale
-                )
-            );
-        }
-        /////////////////////////////////////// ( Verify and authorize URL END )
 
         // Credentials
         String emailUser = credentialsData.get("email").toString();
@@ -103,21 +86,17 @@ public class AccountsLinkDeleteService {
 
         ) {
 
-            // Delete all old tokens
-            accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
-                findUser.get().getId()
-            );
-
             // Create token
             String tokenGenerated = accountsManagementService
                 .createVerificationToken(
                     findUser.get().getId(),
+                    findUser.get().getEmail(),
                     AccountsUpdateEnum.DELETE_ACCOUNT
                 );
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(accountsLinkDeleteDTO.link())
+                .fromHttpUrl(deleteAccountLink)
                 .queryParam("token", tokenGenerated)
                 .build()
                 .toUriString();

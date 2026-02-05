@@ -5,9 +5,8 @@ window.addEventListener("load", () => {
     const responseEl = document.getElementById("response");
     const body = document.body;
 
-    // Read email and token
+    // Read token
     const params = new URLSearchParams(window.location.search);
-    const email = params.get("email");
     const token = params.get("token");
 
     // Call the API endpoint
@@ -20,7 +19,6 @@ window.addEventListener("load", () => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            email: email,
             token: token
         })
     })

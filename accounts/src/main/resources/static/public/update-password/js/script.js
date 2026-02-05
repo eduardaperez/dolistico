@@ -28,9 +28,8 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
     const body = document.body;
     const sucessIcon = document.getElementById("successicon");
 
-    // Read password, email and token
+    // Read password and token
     const params = new URLSearchParams(window.location.search);
-    const email = params.get("email");
     const token = params.get("token");
 
     // Call the API endpoint
@@ -43,7 +42,6 @@ document.getElementById("updatePasswordForm").addEventListener("submit", functio
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            email: email,
             password: passwordField.value,
             token: token
         })

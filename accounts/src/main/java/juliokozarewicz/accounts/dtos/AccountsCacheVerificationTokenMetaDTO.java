@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AccountsCacheVerificationTokenMetaDTO {
 
-    private String verificationToken;
+    private String email;
     private String reason;
 
 }

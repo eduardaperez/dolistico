@@ -53,10 +53,6 @@ class AccountsUpdateEmailController {
         // Request data
         // ---------------------------------------------------------------------
 
-        // Auth endpoint
-        Map<String, Object> credentialsData = (Map<String, Object>)
-        request.getAttribute("credentialsData");
-
         // user log
         String userIp = Optional.ofNullable(request.getHeader("X-Forwarded-For"))
             .filter(ip -> !ip.isBlank())
@@ -73,7 +69,6 @@ class AccountsUpdateEmailController {
         return accountsUpdateEmailService.execute(
             userIp,
             userAgent,
-            credentialsData,
             accountsUpdateEmailDTO
         );
 

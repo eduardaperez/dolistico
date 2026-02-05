@@ -1,22 +1,19 @@
 package juliokozarewicz.accounts.services;
 
+import jakarta.transaction.Transactional;
 import juliokozarewicz.accounts.dtos.AccountsLinkUpdateEmailDTO;
 import juliokozarewicz.accounts.enums.AccountsUpdateEnum;
 import juliokozarewicz.accounts.enums.EmailResponsesEnum;
 import juliokozarewicz.accounts.exceptions.ErrorHandler;
 import juliokozarewicz.accounts.persistence.entities.AccountsEntity;
 import juliokozarewicz.accounts.persistence.repositories.AccountsRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
-import java.net.HttpURLConnection;
 
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.*;
 
 @Service
@@ -31,12 +28,14 @@ public class AccountsLinkUpdateEmailService {
 
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
+
+    @Value("${UPDATE_EMAIL_LINK}")
+    private String updateEmailLink;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsManagementService accountsManagementService;
-    private final EncryptionService encryptionService;
     private final AccountsRepository accountsRepository;
 
     public AccountsLinkUpdateEmailService(
@@ -44,7 +43,6 @@ public class AccountsLinkUpdateEmailService {
         MessageSource messageSource,
         ErrorHandler errorHandler,
         AccountsManagementService accountsManagementService,
-        EncryptionService encryptionService,
         AccountsRepository accountsRepository
 
     ) {
@@ -52,7 +50,6 @@ public class AccountsLinkUpdateEmailService {
         this.messageSource = messageSource;
         this.errorHandler = errorHandler;
         this.accountsManagementService = accountsManagementService;
-        this.encryptionService = encryptionService;
         this.accountsRepository = accountsRepository;
 
     }
@@ -69,22 +66,6 @@ public class AccountsLinkUpdateEmailService {
 
         // language
         Locale locale = LocaleContextHolder.getLocale();
-
-        ////////////////////////////////////// ( Verify and authorize URL INIT )
-        boolean isAllowedURL = accountsManagementService.isAllowedUrl(
-            accountsLinkUpdateEmailDTO.link(),
-            publicDomain
-        );
-
-        if (!isAllowedURL) {
-            errorHandler.customErrorThrow(
-                403,
-                messageSource.getMessage(
-                    "validation_valid_link", null, locale
-                )
-            );
-        }
-        /////////////////////////////////////// ( Verify and authorize URL END )
 
         // Credentials
         UUID idUser = UUID.fromString((String) credentialsData.get("id"));
@@ -127,12 +108,13 @@ public class AccountsLinkUpdateEmailService {
         // Create token
         String tokenGenerated = accountsManagementService.createVerificationToken(
             idUser,
+            emailUser,
             AccountsUpdateEnum.UPDATE_EMAIL
         );
 
         // Link
         String linkFinal = UriComponentsBuilder
-            .fromHttpUrl(accountsLinkUpdateEmailDTO.link())
+            .fromHttpUrl(updateEmailLink)
             .queryParam("token", tokenGenerated)
             .build()
             .toUriString();

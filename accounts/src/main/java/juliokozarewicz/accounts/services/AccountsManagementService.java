@@ -274,34 +274,23 @@ public class AccountsManagementService implements AccountsManagementInterface {
     }
 
     @Override
-    public String createVerificationToken(UUID idUser, String reason) {
+    public String createVerificationToken(UUID idUser, String email, String reason) {
 
         // Get hash
         String hashFinal = encryptionService.createToken();
 
         // Verification DTO
         AccountsCacheVerificationTokenMetaDTO verificationDTO = new AccountsCacheVerificationTokenMetaDTO();
-        verificationDTO.setVerificationToken(hashFinal);
+        verificationDTO.setEmail(email);
         verificationDTO.setReason(reason);
-
-        // Clean old verification token
-        verificationCache.evict(idUser);
 
         // Redis cache (hashFinal and reason in metadata)
         verificationCache.put(
-            idUser,
+            hashFinal,
             verificationDTO
         );
 
         return hashFinal;
-
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteAllVerificationTokenByIdUserNewTransaction(UUID idUser) {
-
-        verificationCache.evict(idUser);
 
     }
 

@@ -32,23 +32,21 @@ public class AccountsLinkUpdatePasswordService {
     @Value("${PUBLIC_DOMAIN}")
     private String publicDomain;
 
-    @Value("${UPDATE_EMAIL_LINK}")
-    private String updateEmailLink;
+    @Value("${UPDATE_PASSWORD_LINK}")
+    private String updatePasswordLink;
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
     private final ErrorHandler errorHandler;
     private final AccountsRepository accountsRepository;
     private final AccountsManagementService accountsManagementService;
-    private final EncryptionService encryptionService;
 
     public AccountsLinkUpdatePasswordService(
 
         MessageSource messageSource,
         ErrorHandler errorHandler,
         AccountsRepository accountsRepository,
-        AccountsManagementService accountsManagementService,
-        EncryptionService encryptionService
+        AccountsManagementService accountsManagementService
 
     ) {
 
@@ -56,7 +54,6 @@ public class AccountsLinkUpdatePasswordService {
         this.errorHandler = errorHandler;
         this.accountsRepository = accountsRepository;
         this.accountsManagementService = accountsManagementService;
-        this.encryptionService  = encryptionService;
 
     }
 
@@ -83,28 +80,17 @@ public class AccountsLinkUpdatePasswordService {
             !findUser.get().isBanned()
 
         ) {
-
-            // Delete all old tokens
-            accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
-                findUser.get().getId()
-            );
-
-            // Encrypted email
-            String encryptedEmail = encryptionService.encrypt(
-                accountsLinkUpdatePasswordDTO.email().toLowerCase()
-            );
-
             // Create token
             String tokenGenerated = accountsManagementService
                 .createVerificationToken(
                     findUser.get().getId(),
+                    findUser.get().getEmail(),
                     AccountsUpdateEnum.UPDATE_PASSWORD
                 );
 
             // Link
             String linkFinal = UriComponentsBuilder
-                .fromHttpUrl(updateEmailLink)
-                .queryParam("email", encryptedEmail)
+                .fromHttpUrl(updatePasswordLink)
                 .queryParam("token", tokenGenerated)
                 .build()
                 .toUriString();

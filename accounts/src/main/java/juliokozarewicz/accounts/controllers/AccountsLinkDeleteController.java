@@ -1,14 +1,10 @@
 package juliokozarewicz.accounts.controllers;
 
-import juliokozarewicz.accounts.dtos.AccountsLinkDeleteDTO;
-import juliokozarewicz.accounts.services.AccountsLinkDeleteService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import juliokozarewicz.accounts.services.AccountsLinkDeleteService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -35,23 +31,14 @@ class AccountsLinkDeleteController {
 
     @PostMapping("/${ACCOUNTS_BASE_URL}/delete-account-link")
     @SuppressWarnings("unchecked")
-    public ResponseEntity handle(
-
-        // dtos errors
-        @Valid @RequestBody() AccountsLinkDeleteDTO accountsLinkDeleteDTO,
-
-        BindingResult bindingResult,
-        HttpServletRequest request
-
-    ) {
+    public ResponseEntity handle( HttpServletRequest request ) {
 
         // Auth endpoint
         Map<String, Object> credentialsData = (Map<String, Object>)
             request.getAttribute("credentialsData");
 
         return accountsLinkDeleteService.execute(
-            credentialsData,
-            accountsLinkDeleteDTO
+            credentialsData
         );
 
     }

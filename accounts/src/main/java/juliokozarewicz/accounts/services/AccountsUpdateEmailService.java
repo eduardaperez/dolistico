@@ -68,7 +68,6 @@ public class AccountsUpdateEmailService {
 
         String userIp,
         String userAgent,
-        Map<String, Object> credentialsData,
         AccountsUpdateEmailDTO accountsUpdateEmailDTO
 
     ) {
@@ -79,15 +78,35 @@ public class AccountsUpdateEmailService {
         // Timestamp
         Instant nowUtc = ZonedDateTime.now(ZoneOffset.UTC).toInstant();
 
-        // Credentials
-        UUID idUser = UUID.fromString((String) credentialsData.get("id"));
+        /////////////////////////////////////// ( process to change email INIT )
 
-        // process to change email
-        // ---------------------------------------------------------------------
+        // find old email and token
+        AccountsCacheVerificationTokenMetaDTO findOldEmailAndToken = Optional
+            .ofNullable(verificationCache.get(accountsUpdateEmailDTO.token()))
+            .map(Cache.ValueWrapper::get)
+            .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
+            .filter(
+                tokenMeta -> tokenMeta
+                    .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
+            )
+            .orElse(null);
 
-        // find user
-        Optional<AccountsEntity> findOldUser =  accountsRepository.findById(
-            idUser
+        // If token not found return error
+        if ( findOldEmailAndToken == null ) {
+
+            // call custom error
+            errorHandler.customErrorThrow(
+                401,
+                messageSource.getMessage(
+                    "response_update_email_fail", null, locale
+                )
+            );
+
+        }
+
+        // find old user
+        Optional<AccountsEntity> findOldUser =  accountsRepository.findByEmail(
+            findOldEmailAndToken.getEmail()
         );
 
         if ( findOldUser.isEmpty() ) {
@@ -102,7 +121,7 @@ public class AccountsUpdateEmailService {
 
         }
 
-        // find old email and pin
+        // find new email and pin
         AccountsCacheVerificationPinMetaDTO pinDTO = null;
         String pinLoginCacheKey = findOldUser.get().getId() + "::" + accountsUpdateEmailDTO.pin();
         pinDTO = Optional
@@ -114,36 +133,6 @@ public class AccountsUpdateEmailService {
                 .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
             )
             .orElse(null);
-
-        // find old email and token
-        AccountsCacheVerificationTokenMetaDTO findOldEmailAndToken = null;
-        findOldEmailAndToken = Optional
-            .ofNullable(verificationCache.get(findOldUser.get().getId()))
-            .map(Cache.ValueWrapper::get)
-            .map(AccountsCacheVerificationTokenMetaDTO.class::cast)
-            .filter(
-                tokenMeta -> accountsUpdateEmailDTO
-                    .token().equals(tokenMeta.getVerificationToken())
-            )
-            .filter(
-                tokenMeta -> tokenMeta
-                    .getReason().equals(AccountsUpdateEnum.UPDATE_EMAIL)
-            )
-            .orElse(null);
-
-
-        // If token not found return error
-        if ( findOldEmailAndToken == null ) {
-
-            // call custom error
-            errorHandler.customErrorThrow(
-                401,
-                messageSource.getMessage(
-                    "response_update_email_fail", null, locale
-                )
-            );
-
-        }
 
         // If pin not found return error
         if ( pinDTO == null ) {
@@ -198,11 +187,6 @@ public class AccountsUpdateEmailService {
             findOldUser.get().getId()
         );
 
-        // Delete all verification tokens
-        accountsManagementService.deleteAllVerificationTokenByIdUserNewTransaction(
-            findOldUser.get().getId()
-        );
-
         // Clean expired refresh tokens
         accountsManagementService.deleteExpiredRefreshTokensListById(
             findOldUser.get().getId()
@@ -210,7 +194,11 @@ public class AccountsUpdateEmailService {
 
         // Revoke current pin
         pinVerificationCache.evict(pinLoginCacheKey);
-        // ---------------------------------------------------------------------
+
+        // Revoke current token
+        verificationCache.evict(accountsUpdateEmailDTO.token());
+
+        //////////////////////////////////////// ( process to change email END )
 
         // Response
         // ---------------------------------------------------------------------

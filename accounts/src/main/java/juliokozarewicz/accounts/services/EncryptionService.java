@@ -165,9 +165,10 @@ public class EncryptionService {
         try {
 
             SecureRandom secureRandom = new SecureRandom();
-            byte[] bytes = new byte[75];
+            // byte[] bytes = new byte[192]; /* 256 characters */
+            byte[] bytes = new byte[96]; /* 128 characters */
             secureRandom.nextBytes(bytes);
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes).substring(0, 100);
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
 
         } catch (Exception e) {
 

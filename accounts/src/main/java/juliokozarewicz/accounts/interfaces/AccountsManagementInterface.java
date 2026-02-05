@@ -9,13 +9,11 @@ public interface AccountsManagementInterface {
 
     UUID createUniqueId();
 
-    String createVerificationToken(UUID idUser, String reason);
+    String createVerificationToken(UUID idUser, String email, String reason);
 
     String createLoginToken(UUID idUser);
 
     String createVerificationPin(UUID idUser, String reason, Object meta);
-
-    void deleteAllVerificationTokenByIdUserNewTransaction(UUID idUser);
 
     String createCredentialJWT(String email);
 
