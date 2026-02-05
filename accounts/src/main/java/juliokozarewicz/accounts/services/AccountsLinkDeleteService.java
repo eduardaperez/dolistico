@@ -1,11 +1,10 @@
 package juliokozarewicz.accounts.services;
 
+import jakarta.transaction.Transactional;
 import juliokozarewicz.accounts.enums.AccountsUpdateEnum;
 import juliokozarewicz.accounts.enums.EmailResponsesEnum;
-import juliokozarewicz.accounts.exceptions.ErrorHandler;
 import juliokozarewicz.accounts.persistence.entities.AccountsEntity;
 import juliokozarewicz.accounts.persistence.repositories.AccountsRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -36,7 +35,6 @@ public class AccountsLinkDeleteService {
     // -------------------------------------------------------------------------
 
     private final MessageSource messageSource;
-    private final ErrorHandler errorHandler;
     private final AccountsRepository accountsRepository;
     private final AccountsManagementService accountsManagementService;
     private final EncryptionService encryptionService;
@@ -44,7 +42,6 @@ public class AccountsLinkDeleteService {
     public AccountsLinkDeleteService(
 
         MessageSource messageSource,
-        ErrorHandler errorHandler,
         AccountsRepository accountsRepository,
         AccountsManagementService accountsManagementService,
         EncryptionService encryptionService
@@ -52,7 +49,6 @@ public class AccountsLinkDeleteService {
     ) {
 
         this.messageSource = messageSource;
-        this.errorHandler = errorHandler;
         this.accountsRepository = accountsRepository;
         this.accountsManagementService = accountsManagementService;
         this.encryptionService  = encryptionService;

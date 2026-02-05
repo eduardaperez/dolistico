@@ -380,7 +380,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/activate-account": {
                     "post": {
                         "summary": "Activate a user account",
-                        "description": "Activates a user account using an email and token. The token must be valid and match the email provided.",
+                        "description": "Activate the user's account using a token.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -391,11 +391,6 @@ public class DocumentationJson {
                                     "schema": {
                                         "type": "object",
                                         "properties": {
-                                            "email": {
-                                                "type": "string",
-                                                "description": "The email address associated with the account.",
-                                                "example": "hgKhGiygkjHGkYgKjgBkyftR676hig868btyb87bghvg76b97yu"
-                                            },
                                             "token": {
                                                 "type": "string",
                                                 "description": "The activation token sent to the user's email.",
@@ -403,7 +398,6 @@ public class DocumentationJson {
                                             }
                                         },
                                         "required": [
-                                            "email",
                                             "token"
                                         ]
                                     }
@@ -558,7 +552,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/update-password": {
                     "patch": {
                         "summary": "Update user password",
-                        "description": "This endpoint allows the user to update their password. The user must provide a valid email, token, and a new password. The token should correspond to the one generated for password update purposes. If successful, the password will be updated.",
+                        "description": "This endpoint allows the user to update their password. The user must provide a valid token and a new password. The token must correspond to the one generated for password update purposes. If successful, the password will be updated.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -569,11 +563,6 @@ public class DocumentationJson {
                                     "schema": {
                                         "type": "object",
                                         "properties": {
-                                            "email": {
-                                                "type": "string",
-                                                "description": "The email address of the user requesting the password update.",
-                                                "example": "hgKhGiygkjHGkYgKjgBkyftR676hig868btyb87bghvg76b97yu"
-                                            },
                                             "password": {
                                                 "type": "string",
                                                 "description": "The new password that the user wants to set.",
@@ -1894,7 +1883,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/update-email-link": {
                     "post": {
                         "summary": "Send verification link and PIN for email update",
-                        "description": "This endpoint allows authenticated users to request an email change. A verification PIN will be sent to the new email address, and a verification link containing a token will be sent to the current email address. Both must be validated to complete the email update process. Additionally, all login refresh tokens will be revoked.",
+                        "description": "This endpoint allows users to request an email change. A verification PIN will be sent to the new email address, and a verification link containing a token will be sent to the current email address. Both must be validated to complete the email update process. Additionally, all login refresh tokens will be revoked.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -1919,12 +1908,6 @@ public class DocumentationJson {
                                                 "format": "email",
                                                 "description": "The new email address that the user wants to register.",
                                                 "example": "email@email.com"
-                                            },
-                                            "link": {
-                                                "type": "string",
-                                                "format": "uri",
-                                                "description": "Base URL where the user will be redirected to confirm the email update.",
-                                                "example": "http://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
                                             }
                                         }
                                     }
@@ -1968,6 +1951,30 @@ public class DocumentationJson {
                                         }
                                     }
                                 }
+                            },
+                            "409": {
+                                "description": "The new email address is already in use.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 409
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Unable to change your email address."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1981,7 +1988,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/update-email": {
                     "patch": {
                         "summary": "Complete email update process",
-                        "description": "This endpoint allows the user to complete the process of updating their email address. The user must log in, since their credentials were revoked in the previous step, and then provide a valid PIN sent to the new email address and a token sent to the current email address. Only after all information has been verified will the email be updated. The user’s credentials will be revoked again, requiring them to log in with the new email address.",
+                        "description": "This endpoint allows the user to complete the process of updating their email address. A link containing a token is sent to the user’s current email address, and a PIN is sent to the new email address. The user must provide both the token and the PIN. Only after both are verified will the email be updated.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -2235,7 +2242,7 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/delete-account-link": {
                     "post": {
                         "summary": "Send account deletion confirmation link",
-                        "description": "This endpoint allows authenticated users to request a confirmation link to delete their account. The system will send a unique token to the user's email. Clicking the link will initiate the account deletion process. Additionally, all login refresh tokens will be revoked.",
+                        "description": "This endpoint allows authenticated users to request a link containing a token to delete their account. The link will be sent to the user's email address. All refresh tokens will be revoked immediately after the request.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -2245,25 +2252,7 @@ public class DocumentationJson {
                             }
                         ],
                         "requestBody": {
-                            "required": true,
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "required": [
-                                            "link"
-                                        ],
-                                        "properties": {
-                                            "link": {
-                                                "type": "string",
-                                                "format": "uri",
-                                                "description": "Base URL where the confirmation link will redirect. The system appends a unique token as a query parameter.",
-                                                "example": "http://example.com/delete-confirmation"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            "required": false
                         },
                         "responses": {
                             "200": {
@@ -2283,7 +2272,7 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Delete your account by clicking the link sent to your email."
+                                                    "example": "Check your email to delete your account."
                                                 },
                                                 "links": {
                                                     "type": "object",
@@ -2315,14 +2304,9 @@ public class DocumentationJson {
                 "/ACCOUNTS_BASE_URL_REPLACE/delete": {
                     "delete": {
                         "summary": "Delete account",
-                        "description": "This endpoint completes the user account deactivation process by verifying a token sent to the current email. A new login is required, as the credentials were revoked in the previous step. Once the request is successful, the account is deactivated and enters a 30-day grace period before permanent deletion. During this period, the user can reactivate the account by changing their password. All active sessions and tokens are revoked immediately. A confirmation email is sent once the deactivation is successfully completed.",
+                        "description": "This endpoint completes the user account deactivation process by verifying a link containing a token sent to the user's email address. Once the request is successful, the account is deactivated and enters a 30-day grace period before permanent deletion. During this period, the user can reactivate the account by changing their password. All active sessions and tokens are revoked immediately. A confirmation email is sent once the deactivation is successfully completed.",
                         "tags": [
                             "ACCOUNTS"
-                        ],
-                        "security": [
-                            {
-                                "BearerAuth": []
-                            }
                         ],
                         "requestBody": {
                             "required": true,
@@ -2336,7 +2320,7 @@ public class DocumentationJson {
                                         "properties": {
                                             "token": {
                                                 "type": "string",
-                                                "description": "The unique verification token sent to the user to confirm the account deletion.",
+                                                "description": "The verification token contained in the account deletion link sent to the user's email.",
                                                 "example": "kjhgJHGJHgJHgy564ygfchgfchgFHGfhgfchGvcHGvctr765fhgfyut"
                                             }
                                         }
@@ -2346,7 +2330,7 @@ public class DocumentationJson {
                         },
                         "responses": {
                             "200": {
-                                "description": "Account deletion initiated successfully.",
+                                "description": "Account deactivation completed successfully.",
                                 "content": {
                                     "application/json": {
                                         "schema": {
@@ -2362,7 +2346,7 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Your account has been successfully deactivated! Your data will be deleted in 30 days. You can still reactivate your account by changing your password within this period."
+                                                    "example": "Your account has been successfully deactivated. Your data will be permanently deleted in 30 days."
                                                 },
                                                 "links": {
                                                     "type": "object",
@@ -2376,6 +2360,30 @@ public class DocumentationJson {
                                                             "example": "/ACCOUNTS_BASE_URL_REPLACE/signup"
                                                         }
                                                     }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "404": {
+                                "description": "Invalid or expired token, or user not found.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 404
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Unable to delete the account."
                                                 }
                                             }
                                         }
