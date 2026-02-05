@@ -116,6 +116,22 @@ public class AccountsActivateService {
 
         }
 
+        // account already activated
+        if ( findUser.get().isActive() || findUser.get().isBanned() ) {
+
+            // Revoke current token
+            verificationCache.evict(accountsActivateDTO.token());
+
+            // call custom error
+            errorHandler.customErrorThrow(
+                404,
+                messageSource.getMessage(
+                    "response_activate_account_error", null, locale
+                )
+            );
+
+        }
+
         // Active account
         if ( !findUser.get().isActive() && !findUser.get().isBanned() ) {
 

@@ -13,7 +13,7 @@ public interface AccountsManagementInterface {
 
     String createLoginToken(UUID idUser);
 
-    String createVerificationPin(UUID idUser, String reason, Object meta);
+    String createVerificationPin(UUID idUser, String reason, String linked, Object meta);
 
     String createCredentialJWT(String email);
 

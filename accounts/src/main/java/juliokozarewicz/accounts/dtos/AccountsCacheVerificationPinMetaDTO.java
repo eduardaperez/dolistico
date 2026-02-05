@@ -12,6 +12,7 @@ import lombok.Setter;
 public class AccountsCacheVerificationPinMetaDTO {
 
     private String reason;
+    private String linked;
     private Object meta;
 
 }

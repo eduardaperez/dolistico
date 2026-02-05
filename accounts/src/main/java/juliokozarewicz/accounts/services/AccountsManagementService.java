@@ -248,11 +248,10 @@ public class AccountsManagementService implements AccountsManagementInterface {
 
     @Override
     public String createVerificationPin(
-
         UUID idUser,
         String reason,
+        String linked,
         Object meta
-
     ) {
 
         // Create pin

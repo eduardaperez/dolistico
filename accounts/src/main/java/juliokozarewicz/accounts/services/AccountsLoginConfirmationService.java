@@ -112,6 +112,10 @@ public class AccountsLoginConfirmationService {
         )
         .map(Cache.ValueWrapper::get)
         .map(AccountsCacheVerificationPinMetaDTO.class::cast)
+        .filter(
+            tokenMeta -> tokenMeta
+                .getReason().equals(AccountsUpdateEnum.LOGIN_ACCOUNT)
+        )
         .orElse(null);
 
         // Invalid or not found login PIN

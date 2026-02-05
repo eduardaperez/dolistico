@@ -91,10 +91,18 @@ public class AccountsLinkUpdateEmailService {
         // process to change email
         // ---------------------------------------------------------------------
 
+        // Create token
+        String tokenGenerated = accountsManagementService.createVerificationToken(
+            idUser,
+            emailUser,
+            AccountsUpdateEnum.UPDATE_EMAIL
+        );
+
         // Create pin
         String pinGenerated = accountsManagementService.createVerificationPin(
             idUser,
             AccountsUpdateEnum.UPDATE_EMAIL,
+            tokenGenerated,
             accountsLinkUpdateEmailDTO.newEmail()
         );
 
@@ -103,13 +111,6 @@ public class AccountsLinkUpdateEmailService {
             accountsLinkUpdateEmailDTO.newEmail().toLowerCase(),
             EmailResponsesEnum.UPDATE_EMAIL_PIN,
             pinGenerated
-        );
-
-        // Create token
-        String tokenGenerated = accountsManagementService.createVerificationToken(
-            idUser,
-            emailUser,
-            AccountsUpdateEnum.UPDATE_EMAIL
         );
 
         // Link

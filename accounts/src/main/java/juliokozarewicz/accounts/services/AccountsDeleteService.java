@@ -89,6 +89,19 @@ public class AccountsDeleteService {
             )
             .orElse(null);
 
+        // Token not exist
+        if ( findToken == null ) {
+
+            // call custom error
+            errorHandler.customErrorThrow(
+                404,
+                messageSource.getMessage(
+                    "response_delete_account_error", null, locale
+                )
+            );
+
+        }
+
         // find user
         Optional<AccountsEntity> findUser =  accountsRepository.findByEmail(
             findToken.getEmail()
@@ -96,6 +109,22 @@ public class AccountsDeleteService {
 
         // User not exist
         if ( findUser.isEmpty() ) {
+
+            // call custom error
+            errorHandler.customErrorThrow(
+                404,
+                messageSource.getMessage(
+                    "response_delete_account_error", null, locale
+                )
+            );
+
+        }
+
+        // User already deactivated
+        if ( !findUser.get().isActive() ) {
+
+            // Revoke current token
+            verificationCache.evict(accountsDeleteDTO.token());
 
             // call custom error
             errorHandler.customErrorThrow(

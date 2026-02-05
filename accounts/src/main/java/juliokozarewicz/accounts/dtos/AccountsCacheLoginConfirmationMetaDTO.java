@@ -12,5 +12,6 @@ import lombok.Setter;
 public class AccountsCacheLoginConfirmationMetaDTO {
 
     private String idUser;
+    private String linked;
 
 }

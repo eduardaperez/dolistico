@@ -177,6 +177,7 @@ public class AccountsLoginService {
         String pinGenerated = accountsManagementService.createVerificationPin(
             findUser.get().getId(),
             AccountsUpdateEnum.LOGIN_ACCOUNT,
+            userLoginToken,
             accountsLoginDTO.email().toLowerCase()
         );
 
