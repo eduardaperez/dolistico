@@ -2332,7 +2332,7 @@ public class DocumentationJson {
                 """
                 # ==============================================================
                 "/ACCOUNTS_BASE_URL_REPLACE/delete": {
-                    "delete": {
+                    "post": {
                         "summary": "Delete account",
                         "description": "This endpoint completes the user account deactivation process by verifying a link containing a token sent to the user's email address. Once the request is successful, the account is deactivated and enters a 30-day grace period before permanent deletion. During this period, the user can reactivate the account by changing their password. All active sessions and tokens are revoked immediately. A confirmation email is sent once the deactivation is successfully completed.",
                         "tags": [
@@ -2376,7 +2376,7 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Your account has been successfully deactivated. Your data will be permanently deleted in 30 days."
+                                                    "example": "Your account has been successfully deactivated! Your data will be deleted in 30 days. You can still reactivate your account by changing your password within this period."
                                                 },
                                                 "links": {
                                                     "type": "object",
@@ -2413,7 +2413,7 @@ public class DocumentationJson {
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Unable to delete the account."
+                                                    "example": "It was not possible to delete your account. Please try again."
                                                 }
                                             }
                                         }

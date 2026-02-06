@@ -1,16 +1,17 @@
 package juliokozarewicz.accounts.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import juliokozarewicz.accounts.dtos.AccountsDeleteDTO;
 import juliokozarewicz.accounts.dtos.AccountsRequestDTO;
 import juliokozarewicz.accounts.services.AccountsDeleteService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -36,7 +37,7 @@ class AccountsDeleteController {
 
     // ===================================================== ( constructor end )
 
-    @DeleteMapping("/${ACCOUNTS_BASE_URL}/delete")
+    @PostMapping("/${ACCOUNTS_BASE_URL}/delete")
     @SuppressWarnings("unchecked")
     public ResponseEntity handle(
 
