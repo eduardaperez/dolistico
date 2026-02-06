@@ -2027,11 +2027,6 @@ public class DocumentationJson {
                         "tags": [
                             "ACCOUNTS"
                         ],
-                        "security": [
-                            {
-                                "BearerAuth": []
-                            }
-                        ],
                         "requestBody": {
                             "required": true,
                             "content": {
