@@ -147,6 +147,24 @@ public class AccountsUpdateEmailService {
 
         }
 
+        // Cross token not allowed
+        if (
+
+            !pinDTO.getLinked().equals(
+                accountsUpdateEmailDTO.token()
+            )
+
+        ) {
+
+            errorHandler.customErrorThrow(
+                404,
+                messageSource.getMessage(
+                    "response_update_email_fail", null, locale
+                )
+            );
+
+        }
+
         // Decoded new email
         String decodedNewEmail = String.valueOf(pinDTO.getMeta());
 

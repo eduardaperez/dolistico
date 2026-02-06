@@ -261,6 +261,7 @@ public class AccountsManagementService implements AccountsManagementInterface {
         AccountsCacheVerificationPinMetaDTO pinDTO =
             new AccountsCacheVerificationPinMetaDTO();
             pinDTO.setReason(reason);
+            pinDTO.setLinked(linked);
             pinDTO.setMeta(meta);
 
         pinVerificationCache.put(

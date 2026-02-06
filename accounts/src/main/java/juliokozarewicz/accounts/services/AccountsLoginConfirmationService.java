@@ -128,6 +128,24 @@ public class AccountsLoginConfirmationService {
             );
         }
 
+        // Cross token not allowed
+        if (
+
+            !findLoginPin.getLinked().equals(
+                accountsLoginConfirmationDTO.userLoginToken()
+            )
+
+        ) {
+
+            errorHandler.customErrorThrow(
+                401,
+                messageSource.getMessage(
+                    "response_invalid_credentials", null, locale
+                )
+            );
+
+        }
+
         // Create JWT
         String AccessCredential = accountsManagementService.createCredentialJWT(
             findUser.get().getEmail().toLowerCase()
