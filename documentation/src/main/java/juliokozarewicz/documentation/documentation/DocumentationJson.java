@@ -1110,7 +1110,7 @@ public class DocumentationJson {
                                                         },
                                                         "theme": {
                                                             "type": "string",
-                                                            "example": "dark mode"
+                                                            "example": "dark-mode"
                                                         }
                                                     }
                                                 },
@@ -1364,7 +1364,7 @@ public class DocumentationJson {
                                                 "type": "string",
                                                 "maxLength": 100,
                                                 "description": "The theme name, which represents the colors and fonts chosen by the user.",
-                                                "example": "dark mode"
+                                                "example": "dark-mode"
                                             }
                                         }
                                     }
@@ -1776,10 +1776,10 @@ public class DocumentationJson {
             .append(
                 """
                 # ==============================================================
-                "/ACCOUNTS_BASE_URL_REPLACE/delete-address": {
+                "/ACCOUNTS_BASE_URL_REPLACE/delete-address/{id}": {
                     "delete": {
-                        "summary": "Delete an address associated with the user",
-                        "description": "This endpoint allows authenticated users to delete an address from their account. The user must provide a valid address ID (UUID format). Only addresses that belong to the authenticated user can be deleted.",
+                        "summary": "Delete user address",
+                        "description": "This endpoint allows an authenticated user to delete one of their registered addresses. The address must belong to the authenticated user, otherwise a not found error will be returned.",
                         "tags": [
                             "ACCOUNTS"
                         ],
@@ -1788,27 +1788,19 @@ public class DocumentationJson {
                                 "BearerAuth": []
                             }
                         ],
-                        "requestBody": {
-                            "required": true,
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "type": "object",
-                                        "required": [
-                                            "addressId"
-                                        ],
-                                        "properties": {
-                                            "addressId": {
-                                                "type": "string",
-                                                "format": "uuid",
-                                                "description": "UUID of the address to be deleted.",
-                                                "example": "262f621c-01c2-4837-9690-f93765b7a124"
-                                            }
-                                        }
-                                    }
+                        "parameters": [
+                            {
+                                "name": "id",
+                                "in": "path",
+                                "required": true,
+                                "description": "UUID of the address to be deleted.",
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "550e8400-e29b-41d4-a716-446655440000"
                                 }
                             }
-                        },
+                        ],
                         "responses": {
                             "200": {
                                 "description": "Address deleted successfully.",
@@ -1834,21 +1826,30 @@ public class DocumentationJson {
                                                     "properties": {
                                                         "self": {
                                                             "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/delete-address"
+                                                            "example": "/api/v1/accounts/address-delete"
                                                         },
                                                         "next": {
                                                             "type": "string",
-                                                            "example": "/ACCOUNTS_BASE_URL_REPLACE/get-address"
+                                                            "example": "/api/v1/accounts/address-get"
                                                         }
                                                     }
                                                 }
+                                            }
+                                        },
+                                        "example": {
+                                            "statusCode": 200,
+                                            "statusMessage": "success",
+                                            "message": "Address deleted successfully.",
+                                            "links": {
+                                                "self": "/api/v1/accounts/address-delete",
+                                                "next": "/api/v1/accounts/address-get"
                                             }
                                         }
                                     }
                                 }
                             },
                             "404": {
-                                "description": "Address not found or does not belong to the user.",
+                                "description": "Address not found.",
                                 "content": {
                                     "application/json": {
                                         "schema": {
@@ -1867,6 +1868,40 @@ public class DocumentationJson {
                                                     "example": "Address not found."
                                                 }
                                             }
+                                        },
+                                        "example": {
+                                            "statusCode": 404,
+                                            "statusMessage": "error",
+                                            "message": "Address not found."
+                                        }
+                                    }
+                                }
+                            },
+                            "400": {
+                                "description": "Bad request.",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "integer",
+                                                    "example": 400
+                                                },
+                                                "statusMessage": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "The request has an error, check."
+                                                }
+                                            }
+                                        },
+                                        "example": {
+                                            "statusCode": 400,
+                                            "statusMessage": "error",
+                                            "message": "The request has an error, check."
                                         }
                                     }
                                 }

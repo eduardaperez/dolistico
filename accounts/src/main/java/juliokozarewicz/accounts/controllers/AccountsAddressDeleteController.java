@@ -1,14 +1,13 @@
 package juliokozarewicz.accounts.controllers;
 
-import juliokozarewicz.accounts.dtos.AccountsAddressDeleteDTO;
+import juliokozarewicz.accounts.dtos.UUIDValidationDTO;
 import juliokozarewicz.accounts.services.AccountsAddressDeleteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -33,12 +32,12 @@ class AccountsAddressDeleteController {
 
     // ===================================================== ( constructor end )
 
-    @DeleteMapping("/${ACCOUNTS_BASE_URL}/delete-address")
+    @DeleteMapping("/${ACCOUNTS_BASE_URL}/delete-address/{idAdressDelete}")
+
     @SuppressWarnings("unchecked")
     public ResponseEntity handle(
 
-        @Valid @RequestBody AccountsAddressDeleteDTO accountsAddressDeleteDTO,
-        BindingResult bindingResult,
+        @Valid @PathVariable UUIDValidationDTO idAdressDelete,
         HttpServletRequest request
 
     ) {
@@ -49,7 +48,7 @@ class AccountsAddressDeleteController {
 
         return accountsAddressDeleteService.execute(
             credentialsData,
-            accountsAddressDeleteDTO
+            idAdressDelete
         );
 
     }

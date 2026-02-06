@@ -1,6 +1,6 @@
 package juliokozarewicz.accounts.services;
 
-import juliokozarewicz.accounts.dtos.AccountsAddressDeleteDTO;
+import juliokozarewicz.accounts.dtos.UUIDValidationDTO;
 import juliokozarewicz.accounts.exceptions.ErrorHandler;
 import juliokozarewicz.accounts.persistence.entities.AccountsAddressEntity;
 import juliokozarewicz.accounts.persistence.repositories.AccountsAddressRepository;
@@ -58,7 +58,7 @@ public class AccountsAddressDeleteService {
     public ResponseEntity execute(
 
         Map<String, Object> credentialsData,
-        AccountsAddressDeleteDTO accountsAddressDeleteDTO
+        UUIDValidationDTO UUIDValidationDTO
 
     ) {
 
@@ -69,7 +69,7 @@ public class AccountsAddressDeleteService {
         UUID idUser = UUID.fromString((String) credentialsData.get("id"));
 
         // Credentials
-        UUID idAddress = accountsAddressDeleteDTO.addressId();
+        UUID idAddress = UUID.fromString(UUIDValidationDTO.uuid());
 
         // find address
         Optional<AccountsAddressEntity> findAddress =  accountsAddressRepository
