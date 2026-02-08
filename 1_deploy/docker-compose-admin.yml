@@ -3,6 +3,15 @@ services:
   # First, create the Docker network.
   # $ docker network create spring_net
 
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    networks:
+      - spring_net
+    command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+
   vault:
     image: hashicorp/vault:1.15.2
     container_name: vault

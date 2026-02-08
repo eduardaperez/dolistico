@@ -1,6 +1,5 @@
 package juliokozarewicz.documentation.controllers;
 
-
 import juliokozarewicz.documentation.documentation.DocumentationJson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -49,11 +48,12 @@ class DocumentationController {
 
     @GetMapping("/${DOCUMENTATION_BASE_URL}")
     public String getElementsUi() {
-        String publicDomainUrl = "http://" + publicDomain.split(",")[0].trim();
+        String basePath = "/" + documentationBaseURL;
+
         return "<html>\n" +
             "<head>\n" +
             "<title>" + applicationTitle.toUpperCase() + "</title>\n" +
-            "<link rel='icon' type='image/x-icon' href='" + publicDomainUrl + "/" + documentationBaseURL + "/static/public/favicon.ico' />\n" +
+            "<link rel='icon' type='image/x-icon' href='" + basePath + "/static/public/favicon.ico' />\n" +
 
             // From web
             // -----------------------------------------------------------------
@@ -62,10 +62,8 @@ class DocumentationController {
             // -----------------------------------------------------------------
 
             // From local
-            // -----------------------------------------------------------------
-            "<script src='" + "http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/static/public/stoplight/web-components.min.js'></script>\n" +
-            "<link rel='stylesheet' href='" + "http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/static/public/stoplight/styles.min.css' />\n" +
-            // -----------------------------------------------------------------
+            "<script src='" + basePath + "/static/public/stoplight/web-components.min.js'></script>\n" +
+            "<link rel='stylesheet' href='" + basePath + "/static/public/stoplight/styles.min.css' />\n" +
 
             "<style>\n" +
             "  body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f9f9f9; }\n" +
@@ -76,7 +74,7 @@ class DocumentationController {
             "<body>\n" +
             "<elements-api\n" +
             "  id='elements-container'\n" +
-            "  apiDescriptionUrl='" + publicDomainUrl + "/" + documentationBaseURL + "/json'\n" +
+            "  apiDescriptionUrl='" + basePath + "/json'\n" +
             "  router='hash'\n" +
             "  layout='sidebar'\n" +
             "/>\n" +
@@ -95,10 +93,12 @@ class DocumentationController {
 
     @GetMapping("/${DOCUMENTATION_BASE_URL}/swagger")
     public String getSwaggerUi() {
+        String basePath = "/" + documentationBaseURL;
+
         return "<html>\n" +
             "<head>\n" +
             "<title>" + applicationTitle.toUpperCase() + "</title>\n" +
-            "<link rel='icon' type='image/x-icon' href='" + "http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/static/public/favicon.ico' />\n" +
+            "<link rel='icon' type='image/x-icon' href='" + basePath + "/static/public/favicon.ico' />\n" +
             "<script src='https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5/swagger-ui-bundle.js'></script>\n" +
             "<link rel='stylesheet' type='text/css' href='https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5/swagger-ui.css' />\n" +
             "<style>\n" +
@@ -112,7 +112,7 @@ class DocumentationController {
             "<div id='swagger-ui'></div>\n" +
             "<script>\n" +
             "  const ui = SwaggerUIBundle({\n" +
-            "    url: 'http://" + publicDomain.split(",")[0].trim() + "/" + documentationBaseURL + "/json',\n" +
+            "    url: '" + basePath + "/json',\n" +
             "    dom_id: '#swagger-ui',\n" +
             "    deepLinking: true,\n" +
             "    presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.presets.sdk],\n" +
