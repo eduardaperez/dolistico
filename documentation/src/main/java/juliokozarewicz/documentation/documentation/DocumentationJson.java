@@ -318,7 +318,7 @@ public class DocumentationJson {
                                             "password": {
                                                 "type": "string",
                                                 "description": "The password for the new account. Must contain at least one uppercase letter, one number, and one special character.",
-                                                "example": "Teste1234!"
+                                                "example": "SecurePass123!"
                                             }
                                         },
                                         "required": [
