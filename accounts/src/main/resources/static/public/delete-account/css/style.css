@@ -1,0 +1,88 @@
+@import url("./config.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--gray5);
+}
+
+#loading {
+    width: 10%;
+    height: 10%;
+}
+
+.spinner {
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/spin-loading.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+#response {
+    display: none;
+    color: var(--black);
+    font-size: 2.8vh;
+    line-height: 1.5;
+    width: 90%;
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    text-transform: lowercase;
+    font-weight: bold;
+    padding: 50px;
+}
+
+#erroricon{
+    display: none;
+    width: 10vh;
+    height: 10vh;
+    background-image: url("../assets/error.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#successicon{
+    display: none;
+    width: 10vh;
+    height: 10vh;
+    background-image: url("../assets/success.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#response::first-letter {
+    text-transform: uppercase;
+}
+
+body.success-background {
+    background-color: var(--green) !important;
+}
+
+body.error-background {
+    background-color: var(--red) !important;
+}
