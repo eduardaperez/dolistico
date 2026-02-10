@@ -65,7 +65,7 @@ body {
 
 #password {
     width: 100%;
-    height: 40px;
+    height: 100%;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -82,7 +82,7 @@ body {
 
 input#password.passworderror {
     width: 100%;
-    height: 40px;
+    height: 100%;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -139,13 +139,14 @@ input#password.passworderror {
 
 #passwordBox{
     width: 100%;
+    height: 40px;
     display: flex;
     gap: 5px;
 }
 
 #passIcon {
     width: 50px;
-    height: 40px;
+    height: 100%;
     background-color: var(--gray1);
     border-radius: 8px;
     background-image: url("../assets/reset-password.svg");
@@ -245,7 +246,6 @@ body.success-background {
 /* >>> MOBILE <<< */
 @media (max-width: 768px) {
     
-    
     #updatePasswordForm {
         width: 75%;
         height: 90%;
@@ -257,74 +257,13 @@ body.success-background {
         gap: 5px;
     }
 
-    #password {
-        width: 100%;
+    #passwordBox{
         height: 50px;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: none;
-        outline: none;
-        background: none;
-        box-shadow: none;
-        background-color: white;
-        color: black;
-        padding-left: 12px;
-        border-radius: 8px;
-        border: 2px solid var(--gray3);
     }
-
-    #passworderror {
-    width: 100%;
-    height: 50px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: none;
-    outline: none;
-    background: none;
-    box-shadow: none;
-    background-color: white;
-    color: black;
-    padding-left: 12px;
-    border-radius: 8px;
-    border: 2px solid var(--darkred);
-}
 
     #sendButtom {
-        width: 100%;
         height: 50px;
-
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: none;
-        outline: none;
-        background: none;
-        box-shadow: none;
-        cursor: pointer;
-        text-align: center;
-        font-weight: bold;
-        background-color: var(--gray1);
-        color: var(--gray5);
-        border-radius: 8px;
-        font-size: 14px;
-        text-transform: uppercase;
-        margin-top: 5px;
     }
-
-    #passIcon {
-        width: 50px;
-        height: 50px;
-        background-color: var(--gray1);
-        border-radius: 8px;
-        background-image: url("../assets/reset-password.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        background-size: auto 50%;
-    }
-
 
 
 }
