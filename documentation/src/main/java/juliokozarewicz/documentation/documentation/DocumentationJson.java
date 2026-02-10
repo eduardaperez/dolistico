@@ -44,7 +44,7 @@ public class DocumentationJson {
             ## Base URL
 
             ```
-            http://PUBLIC_DOMAIN_REPLACE
+            https://PUBLIC_DOMAIN_REPLACE
             ```
             
             
@@ -56,7 +56,7 @@ public class DocumentationJson {
             response examples, and explanations of the data models used.
             Access it here:
             ```
-            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE
+            https://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE
             ```
             
             In addition to direct access to the official documentation, you can 
@@ -68,7 +68,7 @@ public class DocumentationJson {
             quickly exploring requests, responses, and available operations.
             Access it here:
             ```
-            http://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/swagger
+            https://PUBLIC_DOMAIN_REPLACE/DOCUMENTATION_REPLACE/swagger
             ```
             
             
@@ -1074,7 +1074,7 @@ public class DocumentationJson {
                                                     "properties": {
                                                         "profileImage": {
                                                             "type": "string",
-                                                            "example": "http://example.com/image.jpg"
+                                                            "example": "https://example.com/image.jpg"
                                                         },
                                                         "name": {
                                                             "type": "string",
