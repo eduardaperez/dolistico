@@ -9,8 +9,8 @@ services:
     container_name: nginx
     env_file:
       - .env
-    ports:
-      - "${NGINX_PORT}:${NGINX_PORT}"
+    expose:
+      - "${NGINX_PORT}"
     networks:
       - spring_net
     volumes:
@@ -30,8 +30,8 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_ADMIN_USER}
       POSTGRES_PASSWORD: ${DATABASE_ADMIN_PASSWORD}
-    ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    expose:
+      - "${DATABASE_PORT}"
     volumes:
       - database_data:/var/lib/postgresql/data
       - ./config/database/init.sh:/docker-entrypoint-initdb.d/init.sh
@@ -69,8 +69,8 @@ services:
     volumes:
       - cachemanager_data:/data
       - ./config/cachemanager:/init
-    ports:
-      - "${CACHEMANAGER_PORT}:${CACHEMANAGER_PORT}"
+    expose:
+      - "${CACHEMANAGER_PORT}"
     networks:
       - spring_net
     healthcheck:

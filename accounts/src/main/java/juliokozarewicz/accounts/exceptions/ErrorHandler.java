@@ -101,8 +101,8 @@ public class ErrorHandler {
         if (
 
             error instanceof HttpMessageNotReadableException ||
-                error instanceof HttpRequestMethodNotSupportedException ||
-                error instanceof NoResourceFoundException
+            error instanceof HttpRequestMethodNotSupportedException ||
+            error instanceof NoResourceFoundException
 
         ) {
 

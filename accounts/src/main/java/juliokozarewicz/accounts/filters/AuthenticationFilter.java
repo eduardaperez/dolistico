@@ -173,7 +173,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(401);
 
         Map<String, Object> errorResponse = new LinkedHashMap<>();
-        errorResponse.put("status", 401);
+        errorResponse.put("statusCode", 401);
         errorResponse.put("statusMessage", "error");
         errorResponse.put(
             "message",
@@ -186,6 +186,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(jsonResponse);
 
     }
@@ -199,7 +201,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(500);
 
         Map<String, Object> errorResponse = new LinkedHashMap<>();
-        errorResponse.put("status", 500);
+        errorResponse.put("statusCode", 500);
         errorResponse.put("statusMessage", "error");
         errorResponse.put(
             "message",
@@ -212,6 +214,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(jsonResponse);
 
     }

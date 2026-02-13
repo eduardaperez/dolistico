@@ -39,20 +39,25 @@ http {
     # ----------------------------------------------------------- (load balancer end)
 
     # ------------------------------------------ (rate limiting and bots config init)
-    limit_req_zone binary_remote_addr zone=critical_zone:100m rate=5r/m;
-    limit_req_zone binary_remote_addr zone=general_zone:150m rate=20r/m;
-    limit_req_zone binary_remote_addr zone=almost_free_zone:200m rate=100r/m;
-    limit_conn_zone binary_remote_addr zone=conn_limit_zone:100m;
+    map $http_x_forwarded_for $real_client_ip {
+        default $remote_addr;
+        "~^(?P<first_ip>[^,]+)" $first_ip;
+    }
+
+    limit_req_zone $real_client_ip zone=critical_zone:100m rate=5r/m;
+    limit_req_zone $real_client_ip zone=general_zone:150m rate=20r/m;
+    limit_req_zone $real_client_ip zone=almost_free_zone:200m rate=100r/m;
+    limit_conn_zone $real_client_ip zone=conn_limit_zone:100m;
     limit_conn conn_limit_zone 10;
     limit_req_status 429;
 
     # Blocking due to suspicious User-Agent (bots, scanners, etc.)
     # Blocking due to suspicious User-Agent (bots, scanners, etc.)
-        map $http_user_agent $bad_ua {
-            default 0;
-            "~*(curl|wget|python-requests|masscan|nmap|nikto|sqlmap|bot|scraper)" 1;
-            "~*Docker-Healthcheck" 0;
-        }
+    map $http_user_agent $bad_ua {
+        default 0;
+        "~*(curl|wget|python-requests|masscan|nmap|nikto|sqlmap|bot|scraper)" 1;
+        "~*Docker-Healthcheck" 0;
+    }
 
     # Special log for DDOS attacks or limits reached
     log_format ddos '$remote_addr - $http_host "$request" $status [$time_local] '
@@ -177,21 +182,25 @@ http {
 
         location @to_many_request {
             default_type application/json;
+            add_header Content-Type 'application/json; charset=utf-8' always;
             return 429 '{"statusCode": 429, "statusMessage":"error", "detail": "Access blocked by rate limiter (API Gateway)."}';
         }
 
         location @bad_request {
             default_type application/json;
+            add_header Content-Type 'application/json; charset=utf-8' always;
             return 400 '{"statusCode": 400, "statusMessage":"error", "detail": "Bad request (API Gateway)."}';
         }
 
         location @server_error {
             default_type application/json;
+            add_header Content-Type 'application/json; charset=utf-8' always;
             return 500 '{"statusCode": 500, "statusMessage":"error", "detail": "Server error (API Gateway)."}';
         }
 
         location @service_unavailable {
             default_type application/json;
+            add_header Content-Type 'application/json; charset=utf-8' always;
             return 503 '{"statusCode": 503, "statusMessage":"error", "detail": "Service Unavailable (API Gateway)."}';
         }
         # -------------------------------------------------------------- (end errors)
@@ -365,6 +374,15 @@ http {
         location /${ACCOUNTS_BASE_URL}/delete-account-link {
             proxy_pass http://accounts_backend;
             limit_req zone=critical_zone burst=1 nodelay;
+        }
+
+        # [ ACCOUNTS - Delete Account *** STATIC *** ]
+        location /${ACCOUNTS_BASE_URL}/static/delete-account/ {
+            alias /static/public/delete-account/;
+            index index.html;
+            try_files $uri /index.html;
+            add_header Cache-Control "public";
+            limit_req zone=general_zone burst=50 nodelay;
         }
 
         # [ ACCOUNTS - Delete Account ]
