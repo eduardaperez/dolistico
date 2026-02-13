@@ -213,6 +213,10 @@ input#email.emailError {
     font-weight: bold;
 }
 
+#pinBox input.input-error {
+  border: 2px solid var(--red);
+}
+
 body.success-background {
     background-color: var(--green) !important;
 }
@@ -236,7 +240,7 @@ body.success-background {
     text-transform: uppercase;
 }
 
-#successicon{
+#success-icon{
     display: none;
     width: 10vh;
     height: 10vh;
